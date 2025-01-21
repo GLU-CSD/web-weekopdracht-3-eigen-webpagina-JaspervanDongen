@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Writing</h1>
+        <h2>Manage your chapters and writing goals</h2>
+        
+        <div id="writingTools">
+            <!-- Writing tools (e.g., chapter list, goals) will go here -->
+        </div>
+    </div>
+    <!-- Writing HTML for adding chapters and goals -->
+<h2>Chapters</h2>
+<form id="chapterForm">
+    <input type="text" id="chapterTitle" placeholder="Chapter Title" required>
+    <button type="submit">Add Chapter</button>
+</form>
+<ul id="chapterList">
+    <!-- Chapters will be listed here -->
+</ul>
+
+<h2>Writing Goals</h2>
+<form id="goalForm">
+    <input type="text" id="goalDescription" placeholder="Set a Writing Goal" required>
+    <button type="submit">Add Goal</button>
+</form>
+<ul id="goalList">
+    <!-- Writing goals will be listed here -->
+</ul>
+
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+/* General reset for margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: 'Merriweather', serif; /* Fantasy-style font */
+    background: #f4f0e1; /* Light parchment color */
+    color: #3a2a1f; /* Dark brown text for readability */
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Header and Navigation */
+header {
+    background: #4b3f29; /* Dark brown background */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav button {
+    background: #6d5a3e; /* Golden brown buttons */
+    border: 2px solid #8f7b56; /* Slightly lighter border */
+    color: #fff;
+    font-size: 16px;
+    margin: 0 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+nav button:hover {
+    background: #8f7b56; /* Darken on hover */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Glowing effect */
+}
+
+/* Main container */
+main {
+    max-width: 1000px;
+    margin: 20px auto;
+}
+
+/* Header for the pages */
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 36px;
+    color: #6d4f28;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Form inputs and buttons */
+input, textarea {
+    border: 2px solid #d1b092;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #b59761; /* Lighter brown */
+}
+
+button {
+    background: #9e7d4c; /* Muted gold */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #b59761; /* Lighter gold */
+}
+
+/* Folder and Chapter Layout */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+/* Folder and Chapter Layout */
+li {
+    background: #f0e3c5; /* Light yellow background for list items */
+    border: 2px solid #d1b092;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between; /* Ensure space between chapter name and button */
+    align-items: center; /* Center items vertically */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+li span {
+    flex-grow: 1;
+    text-align: center;
+}
+
+li .options-btn {
+    display: inline-block; /* Ensure the button is inline */
+    background-color: #8f7b56;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+li .options-btn:hover {
+    background-color: #6d5a3e; /* Darken on hover */
+}
+
+/* Dropdown Button */
+.dropdown-toggle {
+    background-color: #8f7b56;
+    border-radius: 5px;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    background-color: #6d5a3e; /* Darker shade for hover */
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 80%; /* Align dropdown below the button */
+    left:90%;
+    z-index: 1050; /* Ensure it appears above other elements */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+
+.dropdown-item {
+    padding: 10px;
+    color: #4e3b2e;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f0e3c5; /* Light yellow hover */
+}
+
+/* Adjust the drag handle if needed */
+.drag-handle {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    background-color: #8f7b56;
+    margin-left: 10px;
+    cursor: move;
+    border-radius: 3px;
+    text-align: center;
+}
+
+/* Content Editor */
+textarea {
+    border: 2px solid #d1b092;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    min-height: 300px;
+    font-family: 'Merriweather', serif;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+textarea:focus {
+    border-color: #b59761;
+    outline: none;
+}
+
+/* Button in editor */
+button {
+    background: #6d5a3e;
+    padding: 12px 25px;
+    border-radius: 5px;
+    margin-left: 15px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #8f7b56;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Glowing effect */
+}
+
+/* Special containers (project info, etc.) */
+.container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+    font-family: 'Cinzel', serif;
+    color: #6d4f28;
+    margin-bottom: 15px;
+}
+
+.container p {
+    font-size: 16px;
+    color: #4e3b2e;
+}
+
+/* Bootstrap Grid Adjustments */
+@media (max-width: 768px) {/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(135deg, #c9d8e6, #b4a7c4);
+    color: #fef6e4;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h1, h2, h3 {
+    font-family: 'Lobster', cursive;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+    font-size: 3rem;
+    color: #e4bb8d;
+}
+
+h2 {
+    font-size: 2.5rem;
+    color: #f6bfb3;
+}
+
+/* Header */
+header {
+    background-color: #4e4b6e;
+    padding: 20px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+nav button {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: 2px solid #e4bb8d;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #fef6e4;
+    transition: all 0.3s ease-in-out;
+}
+
+nav button:hover {
+    background-color: #f6bfb3;
+    border-color: #f6bfb3;
+    color: #4e4b6e;
+}
+
+/* Project and Chapter Lists */
+ul.list-group {
+    padding: 10px;
+}
+
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: #f6bfb3;
+    transform: translateY(-5px);
+}
+
+.list-group-item button {
+    margin-left: 15px;
+}
+
+.list-group-item button.btn-outline-light {
+    background-color: #4e4b6e;
+    border-color: #f6bfb3;
+    color: #f6bfb3;
+}
+
+.list-group-item button.btn-outline-light:hover {
+    background-color: #f6bfb3;
+    color: #4e4b6e;
+}
+
+/* Input Fields and Buttons */
+input, textarea {
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #4e4b6e;
+    color: #333;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #f6bfb3;
+    background-color: #fff;
+}
+
+button.btn-primary, button.btn-success, button.btn-danger {
+    font-size: 1rem;
+    border-radius: 8px;
+    padding: 10px 15px;
+    background-color: #4e4b6e;
+    border-color: #f6bfb3;
+    color: #fef6e4;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+button.btn-primary:hover, button.btn-success:hover, button.btn-danger:hover {
+    background-color: #f6bfb3;
+    border-color: #f6bfb3;
+    color: #4e4b6e;
+}
+
+/* Dropdown and Modal */
+.dropdown-menu {
+    background-color: #fef6e4;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu label {
+    font-weight: bold;
+    color: #4e4b6e;
+}
+
+input[type="color"] {
+    width: 50px;
+    height: 40px;
+    padding: 0;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Buttons inside dropdown */
+button.btn-danger {
+    background-color: #e45858;
+    color: #fff;
+    border: none;
+    margin-top: 10px;
+}
+
+button.btn-danger:hover {
+    background-color: #d54242;
+}
+
+/* Miscellaneous */
+.container {
+    padding: 30px 15px;
+}
+
+.btn-group button {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.btn-group button:hover {
+    background-color: #f6bfb3;
+    border-color: #f6bfb3;
+    color: #4e4b6e;
+}
+
+/* Page Transitions */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0;
+}
+
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .nav button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .drag-handle {
+        width: 80px;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}

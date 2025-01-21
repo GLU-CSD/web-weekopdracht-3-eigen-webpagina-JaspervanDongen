@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/styles/main.css">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <nav class="container">
+                <button class="btn btn-outline-light" @click="navigateTo('home')">Home</button>
+            </nav>
+        </header>
+        <div class="container">
+            <main>
+                <!-- Home Page -->
+                <div v-if="currentPage === 'home'">
+                    <h1>Create a New Project</h1>
+                    <div class="mb-3">
+                        <label for="project-name" class="form-label">Project Name:</label>
+                        <input id="project-name" class="form-control" v-model="projectName" type="text" placeholder="Enter project name" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="project-description" class="form-label">Project Description:</label>
+                        <textarea id="project-description" class="form-control" v-model="projectDescription" placeholder="Enter project description"></textarea>
+                    </div>
+                    <button class="btn btn-primary" @click="createProject">Create Project</button>
+                    
+                    <h2>Existing Projects</h2>
+                    <ul class="list-group">
+                        <li v-for="project in projects" :key="project.id" class="list-group-item d-flex justify-content-between align-items-center" :style="{ backgroundColor: project.color || '#fff' }">
+                            <button class="btn btn-link" @click="navigateTo('project', project)">{{ project.name }}</button>
+                            <button class="btn btn-secondary" @click="project.showDropdown = !project.showDropdown">Options</button>
+                            <div v-if="project.showDropdown" class="dropdown">
+                                <label>Change Color:</label>
+                                <input type="color" v-model="project.color" @input="saveToLocalStorage"/>
+                                <button class="btn btn-danger" @click="confirmDeleteProject(project)">Delete Project</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+        
+
+            <!-- Project Page -->
+            <div v-if="currentPage === 'project' && selectedProject">
+                <h1>{{ selectedProject.name }}</h1>
+                <p>{{ selectedProject.description }}</p>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" @click="navigateTo('writing')">Writing</button>
+                    <button class="btn btn-secondary" @click="navigateTo('story')">Story</button>
+                    <button class="btn btn-secondary" @click="navigateTo('characters')">Characters</button>
+                    <button class="btn btn-secondary" @click="navigateTo('worldbuilding')">Worldbuilding</button>
+                </div>
+            </div>
+
+            <!-- Writing Management Page -->
+            <div v-if="currentPage === 'writing' && selectedProject">
+                <h1>Writing Management</h1>
+                <div class="mb-3">
+                    <label for="chapter-name" class="form-label">Chapter Name:</label>
+                    <input id="chapter-name" v-model="chapterName" type="text" class="form-control" placeholder="Enter chapter name" />
+                    <button class="btn btn-success mt-2" @click="addChapter">Add Chapter</button>
+                </div>
+
+                <div>
+                    <h2>Chapters</h2>
+                    <ul class="list-group">
+                        <li v-for="(item, index) in selectedProject.chapters" :key="item.name + index" :style="{ backgroundColor: item.color || '#fff' }" class="list-group-item d-flex justify-content-between align-items-center">
+                            <span @click="openChapterEditor(item, index)"><strong>Chapter:</strong> {{ item.name }}</span>
+                            <button class="btn btn-sm btn-outline-secondary" @click="toggleChapterDropdown(item)">Options</button>
+                            <div v-if="item.showDropdown" class="dropdown-menu show">
+                                <label>Change Color:</label>
+                                <input type="color" v-model="item.color" @input="saveToLocalStorage" class="form-control">
+                                <button class="btn btn-danger btn-sm mt-2" @click="confirmDeleteChapter(item)">Delete</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Chapter Editor Page -->
+            <div v-if="currentPage === 'editor' && selectedProject && currentChapter">
+                <h1>Editing {{ currentChapter.name }}</h1>
+                <textarea v-model="currentChapterContent" class="form-control" placeholder="Write your content here..."></textarea>
+                <button class="btn btn-primary mt-2" @click="saveChapterContent">Save</button>
+            </div>
+
+            <!-- Other Pages (story, characters, worldbuilding) -->
+            <div v-if="currentPage === 'story'">
+                <h1>Story Page</h1>
+                <p>Content for the story management goes here...</p>
+            </div>
+
+            <div v-if="currentPage === 'characters'">
+                <h1>Character Page</h1>
+                <p>Content for character management goes here...</p>
+            </div>
+
+            <div v-if="currentPage === 'worldbuilding'">
+                <h1>Worldbuilding Page</h1>
+                <p>Content for worldbuilding management goes here...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                currentPage: 'home',
+                projectName: '',
+                projectDescription: '',
+                projects: [],
+                selectedProject: null,
+                chapterName: '',
+                currentChapterContent: '',
+                currentChapterIndex: null,
+                currentChapter: null,
+            },
+            methods: {
+                navigateTo(page, project = null, chapter = null) {
+                    this.currentPage = page;
+                    if (project) {
+                        this.selectedProject = project;
+                    }
+                    if (chapter) {
+                        this.currentChapter = chapter;
+                        this.currentChapterContent = chapter.content || ''; // Ensure chapter content is loaded
+                    }
+                },
+                createProject() {
+                    if (this.projectName && this.projectDescription) {
+                        const newProject = {
+                            id: Date.now(),
+                            name: this.projectName,
+                            description: this.projectDescription,
+                            chapters: [],
+                            color: '#ffffff', // Default project color
+                            showDropdown: false,
+                        };
+                        this.projects.push(newProject);
+                        this.projectName = '';
+                        this.projectDescription = '';
+                        this.saveToLocalStorage();
+                    }
+                },
+                addChapter() {
+                    if (!this.selectedProject) {
+                        alert("Please select a project first.");
+                        return;
+                    }
+                    if (this.chapterName) {
+                        const newChapter = {
+                            name: this.chapterName,
+                            content: '',
+                            color: '#ffffff', // Default chapter color
+                            showDropdown: false,
+                        };
+                        this.selectedProject.chapters.push(newChapter);
+                        this.chapterName = '';
+                        this.saveToLocalStorage();
+                    }
+                },
+                openChapterEditor(chapter, index) {
+                    this.navigateTo('editor', this.selectedProject, chapter);
+                },
+                saveChapterContent() {
+                    if (this.currentChapter) {
+                        this.currentChapter.content = this.currentChapterContent;
+                        this.saveToLocalStorage();
+                    }
+                    this.navigateTo('writing', this.selectedProject);
+                },
+                toggleChapterDropdown(chapter) {
+                    chapter.showDropdown = !chapter.showDropdown;
+                },
+                confirmDeleteChapter(chapter) {
+                    const confirmed = confirm(`Are you sure you want to delete the chapter "${chapter.name}"?`);
+                    if (confirmed) {
+                        this.deleteChapter(chapter);
+                    }
+                },
+                deleteChapter(chapter) {
+                    this.selectedProject.chapters = this.selectedProject.chapters.filter(c => c !== chapter);
+                    this.saveToLocalStorage();
+                },
+                confirmDeleteProject(project) {
+                    const confirmed = confirm(`Are you sure you want to delete the project "${project.name}"?`);
+                    if (confirmed) {
+                        this.deleteProject(project);
+                    }
+                },
+                deleteProject(project) {
+                    this.projects = this.projects.filter(p => p !== project);
+                    this.selectedProject = null;
+                    this.saveToLocalStorage();
+                },
+                saveToLocalStorage() {
+                    localStorage.setItem('projects', JSON.stringify(this.projects));
+                },
+                loadFromLocalStorage() {
+                    const savedProjects = localStorage.getItem('projects');
+                    if (savedProjects) {
+                        this.projects = JSON.parse(savedProjects);
+                        // Ensure each project and chapter has a color when loaded
+                        this.projects.forEach(project => {
+                            if (!project.color) {
+                                project.color = '#ffffff'; // Default project color if not set
+                            }
+                            project.chapters.forEach(chapter => {
+                                if (!chapter.color) {
+                                    chapter.color = '#ffffff'; // Default chapter color if not set
+                                }
+                            });
+                        });
+                    }
+                },
+            },
+            created() {
+                this.loadFromLocalStorage();
+            },
+        });
+    </script>
+</body>
+</html>
