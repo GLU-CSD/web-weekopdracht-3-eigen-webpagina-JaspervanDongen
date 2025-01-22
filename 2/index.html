@@ -4,63 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Management</title>
-    <!-- Bootstrap CDN -->
+    <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css CDN for animations -->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/styles/main.css">
+    <style>
+        /* Styling for the color picker box */
+        .color-picker-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+        }
+
+        /* Tooltip for color options */
+        .color-tooltip {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .color-option:hover .color-tooltip {
+            opacity: 1;
+        }
+
+        /* Custom color names below the colors */
+        .color-name {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
-<body>
-    <div id="app">
-        <header class="header">
-            <nav class="container">
-                <button class="btn btn-outline-light" @click="navigateTo('home')">Home</button>
-            </nav>
-        </header>
-        <div class="container">
-            <main>
-                <!-- Home Page -->
-                <div v-if="currentPage === 'home'">
-                    <h1>Create a New Project</h1>
-                    <div class="mb-3">
-                        <label for="project-name" class="form-label">Project Name:</label>
-                        <input id="project-name" class="form-control" v-model="projectName" type="text" placeholder="Enter project name" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="project-description" class="form-label">Project Description:</label>
-                        <textarea id="project-description" class="form-control" v-model="projectDescription" placeholder="Enter project description"></textarea>
-                    </div>
-                    <button class="btn btn-primary" @click="createProject">Create Project</button>
-                    
-                    <h2>Existing Projects</h2>
-                    <ul class="list-group">
-                        <li v-for="project in projects" :key="project.id" class="list-group-item d-flex justify-content-between align-items-center" :style="{ backgroundColor: project.color || '#fff' }">
-                            <button class="btn btn-link" @click="navigateTo('project', project)">{{ project.name }}</button>
-                            <button class="btn btn-secondary" @click="project.showDropdown = !project.showDropdown">Options</button>
-                            <div v-if="project.showDropdown" class="dropdown">
-                                <label>Change Color:</label>
-                                <input type="color" v-model="project.color" @input="saveToLocalStorage"/>
-                                <button class="btn btn-danger" @click="confirmDeleteProject(project)">Delete Project</button>
-                            </div>
+<body class="bg-light">
+    <div id="app" class="container-fluid py-3">
+        <!-- Navbar (Bootstrap 5) -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#" @click.prevent="navigateTo('home')">Project Management</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click.prevent="navigateTo('home')">Home</a>
+                        </li>
+                        <!-- Dropdown for Sections -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarWriting" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Writing
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarWriting">
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('writing')">Writing Overview</a></li>
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('editor')">Chapter Editor</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarStory" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Story
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarStory">
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('story')">Story Overview</a></li>
+                                <li><a class="dropdown-item" href="#">Plot Points</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarCharacters" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Characters
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarCharacters">
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('characters')">Character List</a></li>
+                                <li><a class="dropdown-item" href="#">Character Profiles</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarWorldbuilding" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Worldbuilding
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarWorldbuilding">
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('worldbuilding')">World Overview</a></li>
+                                <li><a class="dropdown-item" href="#">Locations</a></li>
+                                <li><a class="dropdown-item" href="#">Species</a></li>
+                                <li><a class="dropdown-item" href="#">Items</a></li>
+                                <li><a class="dropdown-item" href="#">Languages</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
                         </li>
                     </ul>
                 </div>
-            </main>
-        </div>
-        
+            </div>
+        </nav>
+
+        <main>
+            <!-- Home Page -->
+            <div v-if="currentPage === 'home'" class="animate__animated animate__fadeIn">
+                <h1>Create a New Project</h1>
+                <div class="mb-3">
+                    <label for="project-name" class="form-label">Project Name:</label>
+                    <input id="project-name" class="form-control" v-model="projectName" type="text" placeholder="Enter project name" />
+                </div>
+                <div class="mb-3">
+                    <label for="project-description" class="form-label">Project Description:</label>
+                    <textarea id="project-description" class="form-control" v-model="projectDescription" placeholder="Enter project description"></textarea>
+                </div>
+                <button class="btn btn-primary" @click="createProject">Create Project</button>
+
+                <h2 class="mt-4">Existing Projects</h2>
+                <ul class="list-group">
+                    <li v-for="project in projects" :key="project.id" class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                        <button class="btn btn-link" @click="navigateTo('project', project)">{{ project.name }}</button>
+                    </li>
+                </ul>
+            </div>
 
             <!-- Project Page -->
-            <div v-if="currentPage === 'project' && selectedProject">
+            <div v-if="currentPage === 'project' && selectedProject" class="animate__animated animate__fadeIn">
                 <h1>{{ selectedProject.name }}</h1>
                 <p>{{ selectedProject.description }}</p>
-                <div class="btn-group">
+                <div class="btn-group mb-3">
                     <button class="btn btn-secondary" @click="navigateTo('writing')">Writing</button>
                     <button class="btn btn-secondary" @click="navigateTo('story')">Story</button>
                     <button class="btn btn-secondary" @click="navigateTo('characters')">Characters</button>
                     <button class="btn btn-secondary" @click="navigateTo('worldbuilding')">Worldbuilding</button>
+                    <!-- Project Settings Dropdown -->
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Project Settings
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Edit Project</a></li>
+                        <li><a class="dropdown-item" href="#">Delete Project</a></li>
+                    </ul>
                 </div>
             </div>
 
             <!-- Writing Management Page -->
-            <div v-if="currentPage === 'writing' && selectedProject">
+            <div v-if="currentPage === 'writing' && selectedProject" class="animate__animated animate__fadeIn">
                 <h1>Writing Management</h1>
                 <div class="mb-3">
                     <label for="chapter-name" class="form-label">Chapter Name:</label>
@@ -71,13 +182,18 @@
                 <div>
                     <h2>Chapters</h2>
                     <ul class="list-group">
-                        <li v-for="(item, index) in selectedProject.chapters" :key="item.name + index" :style="{ backgroundColor: item.color || '#fff' }" class="list-group-item d-flex justify-content-between align-items-center">
+                        <li v-for="(item, index) in selectedProject.chapters" :key="item.name + index" :style="{ backgroundColor: item.color || '#fff' }" class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
                             <span @click="openChapterEditor(item, index)"><strong>Chapter:</strong> {{ item.name }}</span>
-                            <button class="btn btn-sm btn-outline-secondary" @click="toggleChapterDropdown(item)">Options</button>
-                            <div v-if="item.showDropdown" class="dropdown-menu show">
-                                <label>Change Color:</label>
-                                <input type="color" v-model="item.color" @input="saveToLocalStorage" class="form-control">
-                                <button class="btn btn-danger btn-sm mt-2" @click="confirmDeleteChapter(item)">Delete</button>
+                            <div class="btn-group" v-if="item.color">
+                                <!-- Hide delete/change color buttons until color is selected -->
+                                <button v-if="item.color" class="btn btn-warning btn-sm" @click="toggleColorPicker(item)">Change Color</button>
+                                <button v-if="item.color" class="btn btn-danger btn-sm" @click="confirmDeleteChapter(index)">Delete</button>
+                            </div>
+                            <!-- Color Picker Box (Conditionally Visible) -->
+                            <div v-if="item.showColorPicker" class="color-picker-box">
+                                <div v-for="(color, colorIndex) in colorOptions" :key="color" :style="{ backgroundColor: color.hex }" class="color-option" @click="changeChapterColor(item, color.hex)">
+                                    <div class="color-tooltip">{{ color.name }}</div>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -85,24 +201,24 @@
             </div>
 
             <!-- Chapter Editor Page -->
-            <div v-if="currentPage === 'editor' && selectedProject && currentChapter">
+            <div v-if="currentPage === 'editor' && selectedProject && currentChapter" class="animate__animated animate__fadeIn">
                 <h1>Editing {{ currentChapter.name }}</h1>
                 <textarea v-model="currentChapterContent" class="form-control" placeholder="Write your content here..."></textarea>
                 <button class="btn btn-primary mt-2" @click="saveChapterContent">Save</button>
             </div>
 
             <!-- Other Pages (story, characters, worldbuilding) -->
-            <div v-if="currentPage === 'story'">
+            <div v-if="currentPage === 'story'" class="animate__animated animate__fadeIn">
                 <h1>Story Page</h1>
                 <p>Content for the story management goes here...</p>
             </div>
 
-            <div v-if="currentPage === 'characters'">
+            <div v-if="currentPage === 'characters'" class="animate__animated animate__fadeIn">
                 <h1>Character Page</h1>
                 <p>Content for character management goes here...</p>
             </div>
 
-            <div v-if="currentPage === 'worldbuilding'">
+            <div v-if="currentPage === 'worldbuilding'" class="animate__animated animate__fadeIn">
                 <h1>Worldbuilding Page</h1>
                 <p>Content for worldbuilding management goes here...</p>
             </div>
@@ -117,118 +233,87 @@
         new Vue({
             el: '#app',
             data: {
-                currentPage: 'home',
-                projectName: '',
-                projectDescription: '',
+                currentPage: 'home', // Default to home page
                 projects: [],
                 selectedProject: null,
+                projectName: '',
+                projectDescription: '',
                 chapterName: '',
-                currentChapterContent: '',
-                currentChapterIndex: null,
                 currentChapter: null,
+                currentChapterContent: '',
+                colorOptions: [
+                    { name: 'Red', hex: '#ff0000' },
+                    { name: 'Green', hex: '#00ff00' },
+                    { name: 'Blue', hex: '#0000ff' },
+                    { name: 'Yellow', hex: '#ffff00' },
+                    { name: 'Purple', hex: '#800080' },
+                    { name: 'Orange', hex: '#ffa500' }
+                ]
             },
             methods: {
-                navigateTo(page, project = null, chapter = null) {
-                    this.currentPage = page;
-                    if (project) {
+                navigateTo(page, project = null) {
+                    if (page === 'project') {
                         this.selectedProject = project;
                     }
-                    if (chapter) {
-                        this.currentChapter = chapter;
-                        this.currentChapterContent = chapter.content || ''; // Ensure chapter content is loaded
-                    }
+                    this.currentPage = page;
                 },
                 createProject() {
-                    if (this.projectName && this.projectDescription) {
-                        const newProject = {
-                            id: Date.now(),
-                            name: this.projectName,
-                            description: this.projectDescription,
-                            chapters: [],
-                            color: '#ffffff', // Default project color
-                            showDropdown: false,
-                        };
-                        this.projects.push(newProject);
-                        this.projectName = '';
-                        this.projectDescription = '';
-                        this.saveToLocalStorage();
-                    }
+                    const newProject = {
+                        id: Date.now(),
+                        name: this.projectName,
+                        description: this.projectDescription,
+                        chapters: []
+                    };
+                    this.projects.push(newProject);
+                    localStorage.setItem('projects', JSON.stringify(this.projects));
+                    this.navigateTo('home');
                 },
                 addChapter() {
-                    if (!this.selectedProject) {
-                        alert("Please select a project first.");
-                        return;
-                    }
                     if (this.chapterName) {
                         const newChapter = {
                             name: this.chapterName,
                             content: '',
-                            color: '#ffffff', // Default chapter color
-                            showDropdown: false,
+                            color: '',
+                            showColorPicker: false
                         };
                         this.selectedProject.chapters.push(newChapter);
-                        this.chapterName = '';
-                        this.saveToLocalStorage();
+                        localStorage.setItem('projects', JSON.stringify(this.projects));
                     }
                 },
                 openChapterEditor(chapter, index) {
-                    this.navigateTo('editor', this.selectedProject, chapter);
+                    this.currentChapter = chapter;
+                    this.currentChapterIndex = index;
+                    this.currentChapterContent = chapter.content;
+                    this.navigateTo('editor');
                 },
                 saveChapterContent() {
                     if (this.currentChapter) {
-                        this.currentChapter.content = this.currentChapterContent;
-                        this.saveToLocalStorage();
-                    }
-                    this.navigateTo('writing', this.selectedProject);
-                },
-                toggleChapterDropdown(chapter) {
-                    chapter.showDropdown = !chapter.showDropdown;
-                },
-                confirmDeleteChapter(chapter) {
-                    const confirmed = confirm(`Are you sure you want to delete the chapter "${chapter.name}"?`);
-                    if (confirmed) {
-                        this.deleteChapter(chapter);
+                        this.selectedProject.chapters[this.currentChapterIndex].content = this.currentChapterContent;
+                        localStorage.setItem('projects', JSON.stringify(this.projects));
+                        this.navigateTo('writing');
                     }
                 },
-                deleteChapter(chapter) {
-                    this.selectedProject.chapters = this.selectedProject.chapters.filter(c => c !== chapter);
-                    this.saveToLocalStorage();
+                toggleColorPicker(chapter) {
+                    chapter.showColorPicker = !chapter.showColorPicker;
                 },
-                confirmDeleteProject(project) {
-                    const confirmed = confirm(`Are you sure you want to delete the project "${project.name}"?`);
-                    if (confirmed) {
-                        this.deleteProject(project);
-                    }
-                },
-                deleteProject(project) {
-                    this.projects = this.projects.filter(p => p !== project);
-                    this.selectedProject = null;
-                    this.saveToLocalStorage();
-                },
-                saveToLocalStorage() {
+                changeChapterColor(chapter, color) {
+                    chapter.color = color;
+                    chapter.showColorPicker = false;
                     localStorage.setItem('projects', JSON.stringify(this.projects));
                 },
-                loadFromLocalStorage() {
-                    const savedProjects = localStorage.getItem('projects');
-                    if (savedProjects) {
-                        this.projects = JSON.parse(savedProjects);
-                        // Ensure each project and chapter has a color when loaded
-                        this.projects.forEach(project => {
-                            if (!project.color) {
-                                project.color = '#ffffff'; // Default project color if not set
-                            }
-                            project.chapters.forEach(chapter => {
-                                if (!chapter.color) {
-                                    chapter.color = '#ffffff'; // Default chapter color if not set
-                                }
-                            });
-                        });
+                confirmDeleteChapter(index) {
+                    if (confirm('Are you sure you want to delete this chapter?')) {
+                        this.selectedProject.chapters.splice(index, 1);
+                        localStorage.setItem('projects', JSON.stringify(this.projects));
                     }
-                },
+                }
             },
-            created() {
-                this.loadFromLocalStorage();
-            },
+            mounted() {
+                const storedProjects = JSON.parse(localStorage.getItem('projects'));
+                if (storedProjects) {
+                    this.projects = storedProjects;
+                }
+            }
         });
     </script>
 </body>
