@@ -1,76 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Management</title>
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Animate.css CDN for animations -->
     <link href="https://cdn.jsdelivr.net/npm/animate.css/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <style>
-        /* Styling for the color picker box */
-        .color-picker-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            position: relative;
-        }
-
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
-            position: relative;
-        }
-
-        .color-option:hover {
-            transform: scale(1.2);
-        }
-
-        /* Tooltip for color options */
-        .color-tooltip {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 12px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .color-option:hover .color-tooltip {
-            opacity: 1;
-        }
-
-        /* Custom color names below the colors */
-        .color-name {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-    </style>
 </head>
+
 <body class="bg-light">
     <div id="app" class="container-fluid py-3">
         <!-- Navbar (Bootstrap 5) -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand" href="#" @click.prevent="navigateTo('home')">Project Management</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -80,38 +31,48 @@
                         </li>
                         <!-- Dropdown for Sections -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarWriting" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarWriting" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Writing
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarWriting">
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('writing')">Writing Overview</a></li>
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('editor')">Chapter Editor</a></li>
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('writing')">Writing
+                                        Overview</a></li>
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('editor')">Chapter
+                                        Editor</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarStory" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarStory" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Story
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarStory">
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('story')">Story Overview</a></li>
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('story')">Story
+                                        Overview</a></li>
                                 <li><a class="dropdown-item" href="#">Plot Points</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarCharacters" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarCharacters" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Characters
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarCharacters">
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('characters')">Character List</a></li>
-                                <li><a class="dropdown-item" href="#">Character Profiles</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        @click.prevent="navigateTo('characters')">Character Management</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        @click.prevent="navigateTo('characterProfiles')">Character Profiles</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarWorldbuilding" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarWorldbuilding" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Worldbuilding
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarWorldbuilding">
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('worldbuilding')">World Overview</a></li>
+                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('worldbuilding')">World
+                                        Management</a></li>
                                 <li><a class="dropdown-item" href="#">Locations</a></li>
                                 <li><a class="dropdown-item" href="#">Species</a></li>
                                 <li><a class="dropdown-item" href="#">Items</a></li>
@@ -134,18 +95,34 @@
                 <h1>Create a New Project</h1>
                 <div class="mb-3">
                     <label for="project-name" class="form-label">Project Name:</label>
-                    <input id="project-name" class="form-control" v-model="projectName" type="text" placeholder="Enter project name" />
+                    <input id="project-name" class="form-control" v-model="projectName" type="text"
+                        placeholder="Enter project name" />
                 </div>
                 <div class="mb-3">
                     <label for="project-description" class="form-label">Project Description:</label>
-                    <textarea id="project-description" class="form-control" v-model="projectDescription" placeholder="Enter project description"></textarea>
+                    <textarea id="project-description" class="form-control" v-model="projectDescription"
+                        placeholder="Enter project description"></textarea>
                 </div>
                 <button class="btn btn-primary" @click="createProject">Create Project</button>
 
                 <h2 class="mt-4">Existing Projects</h2>
                 <ul class="list-group">
-                    <li v-for="project in projects" :key="project.id" class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                    <li v-for="project in projects" :key="project.id"
+                        class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
                         <button class="btn btn-link" @click="navigateTo('project', project)">{{ project.name }}</button>
+                        <!-- Dropdown for Project Options -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Options
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="#" @click="editProject(project)">Edit Project</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" @click="confirmDeleteProject(project)">Delete
+                                        Project</a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -160,7 +137,8 @@
                     <button class="btn btn-secondary" @click="navigateTo('characters')">Characters</button>
                     <button class="btn btn-secondary" @click="navigateTo('worldbuilding')">Worldbuilding</button>
                     <!-- Project Settings Dropdown -->
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         Project Settings
                     </button>
                     <ul class="dropdown-menu">
@@ -170,28 +148,38 @@
                 </div>
             </div>
 
+
+
             <!-- Writing Management Page -->
             <div v-if="currentPage === 'writing' && selectedProject" class="animate__animated animate__fadeIn">
                 <h1>Writing Management</h1>
                 <div class="mb-3">
                     <label for="chapter-name" class="form-label">Chapter Name:</label>
-                    <input id="chapter-name" v-model="chapterName" type="text" class="form-control" placeholder="Enter chapter name" />
+                    <input id="chapter-name" v-model="chapterName" type="text" class="form-control"
+                        placeholder="Enter chapter name" />
                     <button class="btn btn-success mt-2" @click="addChapter">Add Chapter</button>
                 </div>
 
                 <div>
                     <h2>Chapters</h2>
                     <ul class="list-group">
-                        <li v-for="(item, index) in selectedProject.chapters" :key="item.name + index" :style="{ backgroundColor: item.color || '#fff' }" class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
-                            <span @click="openChapterEditor(item, index)"><strong>Chapter:</strong> {{ item.name }}</span>
+                        <li v-for="(item, index) in selectedProject.chapters" :key="item.name + index"
+                            :style="{ backgroundColor: item.color || '#fff' }"
+                            class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                            <span @click="openChapterEditor(item, index)"><strong>Chapter:</strong> {{ item.name
+                                }}</span>
                             <div class="btn-group" v-if="item.color">
                                 <!-- Hide delete/change color buttons until color is selected -->
-                                <button v-if="item.color" class="btn btn-warning btn-sm" @click="toggleColorPicker(item)">Change Color</button>
-                                <button v-if="item.color" class="btn btn-danger btn-sm" @click="confirmDeleteChapter(index)">Delete</button>
+                                <button v-if="item.color" class="btn btn-warning btn-sm"
+                                    @click="toggleColorPicker(item)">Change Color</button>
+                                <button v-if="item.color" class="btn btn-danger btn-sm"
+                                    @click="confirmDeleteChapter(index)">Delete</button>
                             </div>
                             <!-- Color Picker Box (Conditionally Visible) -->
                             <div v-if="item.showColorPicker" class="color-picker-box">
-                                <div v-for="(color, colorIndex) in colorOptions" :key="color" :style="{ backgroundColor: color.hex }" class="color-option" @click="changeChapterColor(item, color.hex)">
+                                <div v-for="(color, colorIndex) in colorOptions" :key="color"
+                                    :style="{ backgroundColor: color.hex }" class="color-option"
+                                    @click="changeChapterColor(item, color.hex)">
                                     <div class="color-tooltip">{{ color.name }}</div>
                                 </div>
                             </div>
@@ -201,120 +189,1084 @@
             </div>
 
             <!-- Chapter Editor Page -->
-            <div v-if="currentPage === 'editor' && selectedProject && currentChapter" class="animate__animated animate__fadeIn">
+            <div v-if="currentPage === 'editor' && selectedProject && currentChapter"
+                class="animate__animated animate__fadeIn">
                 <h1>Editing {{ currentChapter.name }}</h1>
-                <textarea v-model="currentChapterContent" class="form-control" placeholder="Write your content here..."></textarea>
-                <button class="btn btn-primary mt-2" @click="saveChapterContent">Save</button>
+                <textarea v-model="currentChapterContent" class="form-control"
+                    placeholder="Write your content here..."></textarea>
+                <button class="btn btn-primary mt-2" @click="saveChapterContent">Save Chapter</button>
             </div>
 
-            <!-- Other Pages (story, characters, worldbuilding) -->
-            <div v-if="currentPage === 'story'" class="animate__animated animate__fadeIn">
-                <h1>Story Page</h1>
-                <p>Content for the story management goes here...</p>
+            <!-- Worldbuilding Management Page -->
+            <div v-if="currentPage === 'worldbuilding' && selectedProject" class="animate__animated animate__fadeIn">
+                <h1>Worldbuilding Management</h1>
+
+                <!-- Add New Location Form -->
+                <div class="mb-3">
+                    <label for="location-name" class="form-label">Location Name:</label>
+                    <input id="location-name" v-model="newLocation.name" type="text" class="form-control"
+                        placeholder="Enter location name" />
+                </div>
+                <div class="mb-3">
+                    <label for="location-description" class="form-label">Location Description:</label>
+                    <textarea id="location-description" v-model="newLocation.description" class="form-control"
+                        placeholder="Enter location description"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="location-avatar" class="form-label">Location Avatar:</label>
+                    <input type="file" class="form-control" @change="uploadAvatar('newLocation', $event)" />
+                </div>
+                <button class="btn btn-success" @click="addLocation">Add Location</button>
+
+                <!-- Existing Locations List -->
+                <h2 class="mt-4">Existing Locations</h2>
+                <ul class="list-group">
+                    <li v-for="(location, index) in selectedProject.locations" :key="location.name + index"
+                        class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                        <div class="d-flex align-items-center">
+                            <span @click="editLocation(location, index)" class="ms-2"><strong>Name:</strong> {{
+                                location.name }}</span>
+                            <img v-if="location.avatar" :src="location.avatar" alt="Avatar" class="avatar-thumbnail" />
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-warning btn-sm" @click="editLocation(location, index)">Edit</button>
+                            <button class="btn btn-danger btn-sm" @click="confirmDeleteLocation(index)">Delete</button>
+                        </div>
+                    </li>
+                </ul>
             </div>
 
-            <div v-if="currentPage === 'characters'" class="animate__animated animate__fadeIn">
-                <h1>Character Page</h1>
-                <p>Content for character management goes here...</p>
+
+
+
+
+            <!-- Character Profiles Page -->
+            <div v-if="currentPage === 'characterProfiles' && selectedProject"
+                class="animate__animated animate__fadeIn">
+                <h1>Character Profiles</h1>
+
+                <!-- Character List -->
+                <ul class="list-group">
+                    <li v-for="(character, index) in selectedProject.characters" :key="character.name + index"
+                        class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                        <div class="d-flex align-items-center">
+                            <span @click="showCharacterProfile(character, index)" class="ms-2">
+                                <strong>{{ character.name }}</strong>
+                            </span>
+                            <img v-if="character.avatar" :src="character.avatar" alt="Avatar"
+                                class="avatar-thumbnail" />
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- Character Attributes Modal -->
+                <div v-if="currentCharacterProfile" class="character-profile mt-4">
+                    <h2>{{ currentCharacterProfile.name }}'s Profile</h2>
+
+                    <!-- Accordion for organized sections -->
+                    <div id="accordion">
+
+                        <!-- Character Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingCharacter">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseCharacter"
+                                        aria-expanded="true" aria-controls="collapseCharacter">
+                                        Character
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseCharacter" class="collapse show" aria-labelledby="headingCharacter"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Age:</strong> {{ currentCharacterProfile.age }}</p>
+                                    <p><strong>Gender:</strong> {{ currentCharacterProfile.gender }}</p>
+                                    <p><strong>Date of Birth:</strong> {{ currentCharacterProfile.dob }}</p>
+                                    <p><strong>Job:</strong> {{ currentCharacterProfile.job }}</p>
+                                    <p><strong>Job Satisfaction:</strong> {{ currentCharacterProfile.jobSatisfaction }}
+                                    </p>
+                                    <p><strong>Health:</strong> {{ currentCharacterProfile.health }}</p>
+                                    <p><strong>Relationships:</strong> {{ currentCharacterProfile.relationships }}</p>
+                                    <p><strong>Pets:</strong> {{ currentCharacterProfile.pets }}</p>
+                                    <p><strong>World:</strong> {{ currentCharacterProfile.world }}</p>
+                                    <p><strong>Area of Residence:</strong> {{ currentCharacterProfile.areaOfResidence }}
+                                    </p>
+                                    <p><strong>Neighbourhood:</strong> {{ currentCharacterProfile.neighbourhood }}</p>
+                                    <p><strong>Home Description:</strong> {{ currentCharacterProfile.homeDescription }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appearance Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingAppearance">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#collapseAppearance" aria-expanded="false"
+                                        aria-controls="collapseAppearance">
+                                        Appearance
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseAppearance" class="collapse" aria-labelledby="headingAppearance"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Height:</strong> {{ currentCharacterProfile.height }}</p>
+                                    <p><strong>Weight:</strong> {{ currentCharacterProfile.weight }}</p>
+                                    <p><strong>Ethnicity:</strong> {{ currentCharacterProfile.ethnicity }}</p>
+                                    <p><strong>Skin Tone:</strong> {{ currentCharacterProfile.skinTone }}</p>
+                                    <p><strong>Eye Color:</strong> {{ currentCharacterProfile.eyeColor }}</p>
+                                    <p><strong>Distinguishing Features:</strong> {{
+                                        currentCharacterProfile.distinguishFeatures }}</p>
+                                    <p><strong>Other Facial Features:</strong> {{
+                                        currentCharacterProfile.otherFacialFeatures }}</p>
+                                    <p><strong>Hairstyle:</strong> {{ currentCharacterProfile.hairstyle }}</p>
+                                    <p><strong>Body Type:</strong> {{ currentCharacterProfile.bodyType }}</p>
+                                    <p><strong>Clothing Style:</strong> {{ currentCharacterProfile.clothingStyle }}</p>
+                                    <p><strong>Accessories:</strong> {{ currentCharacterProfile.accessories }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personality Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingPersonality">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#collapsePersonality" aria-expanded="false"
+                                        aria-controls="collapsePersonality">
+                                        Personality
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapsePersonality" class="collapse" aria-labelledby="headingPersonality"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Skills:</strong> {{ currentCharacterProfile.skills }}</p>
+                                    <p><strong>Incompetence:</strong> {{ currentCharacterProfile.incompetence }}</p>
+                                    <p><strong>Talent:</strong> {{ currentCharacterProfile.talent }}</p>
+                                    <p><strong>Weakness:</strong> {{ currentCharacterProfile.weakness }}</p>
+                                    <p><strong>Hobbies:</strong> {{ currentCharacterProfile.hobbies }}</p>
+                                    <p><strong>Habits:</strong> {{ currentCharacterProfile.habits }}</p>
+                                    <p><strong>Moral:</strong> {{ currentCharacterProfile.moral }}</p>
+                                    <p><strong>Self Control:</strong> {{ currentCharacterProfile.selfControl }}</p>
+                                    <p><strong>Motivation:</strong> {{ currentCharacterProfile.motivation }}</p>
+                                    <p><strong>Discouragement:</strong> {{ currentCharacterProfile.discouragement }}</p>
+                                    <p><strong>Confidence Level:</strong> {{ currentCharacterProfile.confidenceLevel }}
+                                    </p>
+                                    <p><strong>Greatest Fear:</strong> {{ currentCharacterProfile.greatestFear }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingHistory">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseHistory"
+                                        aria-expanded="false" aria-controls="collapseHistory">
+                                        History
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseHistory" class="collapse" aria-labelledby="headingHistory"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Childhood:</strong> {{ currentCharacterProfile.childhood }}</p>
+                                    <p><strong>Important Past Events:</strong> {{
+                                        currentCharacterProfile.importantPastEvents }}</p>
+                                    <p><strong>Best Accomplishment:</strong> {{
+                                        currentCharacterProfile.bestAccomplishment }}</p>
+                                    <p><strong>Failure:</strong> {{ currentCharacterProfile.failure }}</p>
+                                    <p><strong>Secrets:</strong> {{ currentCharacterProfile.secrets }}</p>
+                                    <p><strong>Best Memories:</strong> {{ currentCharacterProfile.bestMemories }}</p>
+                                    <p><strong>Worst Memories:</strong> {{ currentCharacterProfile.worstMemories }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Story Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingStory">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseStory"
+                                        aria-expanded="false" aria-controls="collapseStory">
+                                        Story
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseStory" class="collapse" aria-labelledby="headingStory"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Story Role:</strong> {{ currentCharacterProfile.storyRole }}</p>
+                                    <p><strong>Short Term Goals:</strong> {{ currentCharacterProfile.shortTermGoals }}
+                                    </p>
+                                    <p><strong>Long Term Goals:</strong> {{ currentCharacterProfile.longTermGoals }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Close Button -->
+                    <button class="btn btn-secondary" @click="closeCharacterProfile">Close</button>
+                </div>
             </div>
 
-            <div v-if="currentPage === 'worldbuilding'" class="animate__animated animate__fadeIn">
-                <h1>Worldbuilding Page</h1>
-                <p>Content for worldbuilding management goes here...</p>
+
+
+
+            <!-- Character Management Page -->
+            <div v-if="currentPage === 'characters' && selectedProject" class="animate__animated animate__fadeIn">
+                <h1>Character Management</h1>
+                <!-- Add New Character Form -->
+                <div class="mb-3">
+                    <label for="character-name" class="form-label">Character Name:</label>
+                    <input id="character-name" v-model="newCharacter.name" type="text" class="form-control"
+                        placeholder="Enter character name" />
+                </div>
+                <div class="mb-3">
+                    <label for="character-description" class="form-label">Character Description:</label>
+                    <textarea id="character-description" v-model="newCharacter.description" class="form-control"
+                        placeholder="Enter character description"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="character-avatar" class="form-label">Character Avatar:</label>
+                    <input type="file" class="form-control" @change="uploadAvatar('newCharacter', $event)" />
+                </div>
+                <button class="btn btn-success" @click="addCharacter">Add Character</button>
+
+                <!-- Existing Characters List -->
+                <h2 class="mt-4">Existing Characters</h2>
+                <ul class="list-group">
+                    <li v-for="(character, index) in selectedProject.characters" :key="character.name + index"
+                        class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                        <div class="d-flex align-items-center">
+                            <span @click="editCharacter(character, index)" class="ms-2"><strong>Name:</strong> {{
+                                character.name }}</span>
+                            <img v-if="character.avatar" :src="character.avatar" alt="Avatar"
+                                class="avatar-thumbnail" />
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-warning btn-sm"
+                                @click="editCharacter(character, index)">Edit</button>
+                            <button class="btn btn-danger btn-sm" @click="confirmDeleteCharacter(index)">Delete</button>
+                        </div>
+                    </li>
+                </ul>
             </div>
-        </main>
+
+            <!-- In the Character Edit Page section -->
+            <div v-if="currentPage === 'editCharacter' && selectedProject && currentCharacter"
+                class="animate__animated animate__fadeIn">
+                <h1>Edit Character</h1>
+
+                <div class="mb-3">
+                    <label for="edit-character-name" class="form-label">Character Name:</label>
+                    <input id="edit-character-name" v-model="currentCharacter.name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="edit-character-description" class="form-label">Character Description:</label>
+                    <textarea id="edit-character-description" v-model="currentCharacter.description"
+                        class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="edit-character-avatar" class="form-label">Character Avatar:</label>
+                    <input type="file" class="form-control" @change="uploadAvatar('currentCharacter', $event)" />
+                </div>
+                <div v-if="currentCharacter.avatar">
+                    <img :src="currentCharacter.avatar" alt="Avatar Preview" class="avatar-preview" />
+                </div>
+
+                <!-- Attributes Section -->
+                <div class="attributes-section mt-4">
+                    <h3>Attributes</h3>
+
+                    <!-- Character Section Toggle -->
+                    <div>
+                        <button class="btn btn-secondary"
+                            @click="characterAttributesVisible = !characterAttributesVisible">
+                            Character
+                        </button>
+                        <div v-if="characterAttributesVisible">
+
+                            <!-- Age -->
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input id="age" v-model="currentCharacter.age" type="text" class="form-control"
+                                    placeholder="Enter age">
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <input id="gender" v-model="currentCharacter.gender" type="text" class="form-control"
+                                    placeholder="Enter gender">
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="mb-3">
+                                <label for="pronouns" class="form-label">Gender</label>
+                                <input id="pronouns" v-model="currentCharacter.pronouns" type="text"
+                                    class="form-control" placeholder="Enter pronouns">
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="mb-3">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input id="dob" v-model="currentCharacter.dob" type="text" class="form-control"
+                                    placeholder="Enter date">
+                            </div>
+
+                            <!-- Job -->
+                            <div class="mb-3">
+                                <label for="job" class="form-label">Job</label>
+                                <input id="job" v-model="currentCharacter.job" type="text" class="form-control"
+                                    placeholder="Enter job">
+                            </div>
+
+                            <!-- Job Satisfaction -->
+                            <div class="mb-3">
+                                <label for="jobSatisfaction" class="form-label">Job Satisfaction</label>
+                                <input id="jobSatisfaction" v-model="currentCharacter.jobSatisfaction" type="text"
+                                    class="form-control" placeholder="Rate job satisfaction">
+                            </div>
+
+                            <!-- Health -->
+                            <div class="mb-3">
+                                <label for="health" class="form-label">Health</label>
+                                <input id="health" v-model="currentCharacter.health" type="text" class="form-control"
+                                    placeholder="Describe health status">
+                            </div>
+
+                            <!-- Relationships -->
+                            <div class="mb-3">
+                                <label for="relationships" class="form-label">Relationships</label>
+                                <input id="relationships" v-model="currentCharacter.relationships" type="text"
+                                    class="form-control" placeholder="Describe relationships">
+                            </div>
+
+                            <!-- Pets -->
+                            <div class="mb-3">
+                                <label for="pets" class="form-label">Pets</label>
+                                <input id="pets" v-model="currentCharacter.pets" type="text" class="form-control"
+                                    placeholder="Describe pets">
+                            </div>
+
+                            <!-- World -->
+                            <div class="mb-3">
+                                <label for="world" class="form-label">World</label>
+                                <input id="world" v-model="currentCharacter.world" type="text" class="form-control"
+                                    placeholder="Enter world">
+                            </div>
+
+                            <!-- Area of Residence -->
+                            <div class="mb-3">
+                                <label for="areaOfResidence" class="form-label">Area of Residence</label>
+                                <input id="areaOfResidence" v-model="currentCharacter.areaOfResidence" type="text"
+                                    class="form-control" placeholder="Enter area of residence">
+                            </div>
+
+                            <!-- Neighbourhood -->
+                            <div class="mb-3">
+                                <label for="neighbourhood" class="form-label">Neighbourhood</label>
+                                <input id="neighbourhood" v-model="currentCharacter.neighbourhood" type="text"
+                                    class="form-control" placeholder="Enter neighbourhood">
+                            </div>
+
+                            <!-- Home Description -->
+                            <div class="mb-3">
+                                <label for="homeDescription" class="form-label">Home Description</label>
+                                <textarea id="homeDescription" v-model="currentCharacter.homeDescription"
+                                    class="form-control" placeholder="Describe the home"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Appearance Section Toggle -->
+                    <div>
+                        <button class="btn btn-secondary"
+                            @click="appearanceAttributesVisible = !appearanceAttributesVisible">
+                            Appearance
+                        </button>
+                        <div v-if="appearanceAttributesVisible">
+
+                            <!-- Height -->
+                            <div class="mb-3">
+                                <label for="height" class="form-label">Height</label>
+                                <input id="height" v-model="currentCharacter.height" type="text" class="form-control"
+                                    placeholder="Enter height">
+                            </div>
+
+                            <!-- Weight -->
+                            <div class="mb-3">
+                                <label for="weight" class="form-label">Weight</label>
+                                <input id="weight" v-model="currentCharacter.weight" type="text" class="form-control"
+                                    placeholder="Enter weight">
+                            </div>
+
+                            <!-- Ethnicity -->
+                            <div class="mb-3">
+                                <label for="ethnicity" class="form-label">Ethnicity</label>
+                                <input id="ethnicity" v-model="currentCharacter.ethnicity" type="text"
+                                    class="form-control" placeholder="Enter ethnicity">
+                            </div>
+
+                            <!-- Skin Tone -->
+                            <div class="mb-3">
+                                <label for="skinTone" class="form-label">Skin Tone</label>
+                                <input id="skinTone" v-model="currentCharacter.skinTone" type="text"
+                                    class="form-control" placeholder="Enter skin tone">
+                            </div>
+
+                            <!-- Eye Color -->
+                            <div class="mb-3">
+                                <label for="eyeColor" class="form-label">Eye Color</label>
+                                <input id="eyeColor" v-model="currentCharacter.eyeColor" type="text"
+                                    class="form-control" placeholder="Enter eye color">
+                            </div>
+
+                            <!-- Distinguishing Features -->
+                            <div class="mb-3">
+                                <label for="distinguishingFeatures" class="form-label">Distinguishing Features</label>
+                                <input id="distinguishingFeatures" v-model="currentCharacter.distinguishingFeatures"
+                                    type="text" class="form-control" placeholder="Describe distinguishing features">
+                            </div>
+
+                            <!-- Other Facial Features -->
+                            <div class="mb-3">
+                                <label for="otherFacialFeatures" class="form-label">Other Facial Features</label>
+                                <input id="otherFacialFeatures" v-model="currentCharacter.otherFacialFeatures"
+                                    type="text" class="form-control" placeholder="Describe other facial features">
+                            </div>
+
+                            <!-- Hairstyle -->
+                            <div class="mb-3">
+                                <label for="hairstyle" class="form-label">Hairstyle</label>
+                                <input id="hairstyle" v-model="currentCharacter.hairstyle" type="text"
+                                    class="form-control" placeholder="Enter hairstyle">
+                            </div>
+
+                            <!-- Body Type -->
+                            <div class="mb-3">
+                                <label for="bodyType" class="form-label">Body Type</label>
+                                <input id="bodyType" v-model="currentCharacter.bodyType" type="text"
+                                    class="form-control" placeholder="Enter body type">
+                            </div>
+
+                            <!-- Clothing Style -->
+                            <div class="mb-3">
+                                <label for="clothingStyle" class="form-label">Clothing Style</label>
+                                <input id="clothingStyle" v-model="currentCharacter.clothingStyle" type="text"
+                                    class="form-control" placeholder="Describe clothing style">
+                            </div>
+
+                            <!-- Accessories -->
+                            <div class="mb-3">
+                                <label for="accessories" class="form-label">Accessories</label>
+                                <input id="accessories" v-model="currentCharacter.accessories" type="text"
+                                    class="form-control" placeholder="Describe accessories">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Personality Section Toggle -->
+                    <div>
+                        <button class="btn btn-secondary"
+                            @click="personalityAttributesVisible = !personalityAttributesVisible">
+                            Personality
+                        </button>
+                        <div v-if="personalityAttributesVisible">
+
+
+                            <!-- Skills -->
+                            <div class="mb-3">
+                                <label for="skills" class="form-label">Skills</label>
+                                <input id="skills" v-model="currentCharacter.skills" type="text" class="form-control"
+                                    placeholder="Enter skills">
+                            </div>
+
+                            <!-- Incompetence -->
+                            <div class="mb-3">
+                                <label for="incompetence" class="form-label">Incompetence</label>
+                                <input id="incompetence" v-model="currentCharacter.incompetence" type="text"
+                                    class="form-control" placeholder="Enter incompetence">
+                            </div>
+
+                            <!-- Talent -->
+                            <div class="mb-3">
+                                <label for="talent" class="form-label">Talent</label>
+                                <input id="talent" v-model="currentCharacter.talent" type="text" class="form-control"
+                                    placeholder="Enter talent">
+                            </div>
+
+                            <!-- Weakness -->
+                            <div class="mb-3">
+                                <label for="weakness" class="form-label">Weakness</label>
+                                <input id="weakness" v-model="currentCharacter.weakness" type="text"
+                                    class="form-control" placeholder="Enter weakness">
+                            </div>
+
+                            <!-- Hobbies -->
+                            <div class="mb-3">
+                                <label for="hobbies" class="form-label">Hobbies</label>
+                                <input id="hobbies" v-model="currentCharacter.hobbies" type="text" class="form-control"
+                                    placeholder="Enter hobbies">
+                            </div>
+
+                            <!-- Habits -->
+                            <div class="mb-3">
+                                <label for="habits" class="form-label">Habits</label>
+                                <input id="habits" v-model="currentCharacter.habits" type="text" class="form-control"
+                                    placeholder="Enter habits">
+                            </div>
+
+                            <!-- Moral -->
+                            <div class="mb-3">
+                                <label for="moral" class="form-label">Moral</label>
+                                <input id="moral" v-model="currentCharacter.moral" type="text" class="form-control"
+                                    placeholder="Enter moral values">
+                            </div>
+
+                            <!-- Self Control -->
+                            <div class="mb-3">
+                                <label for="selfControl" class="form-label">Self Control</label>
+                                <input id="selfControl" v-model="currentCharacter.selfControl" type="text"
+                                    class="form-control" placeholder="Enter self control level">
+                            </div>
+
+                            <!-- Motivation -->
+                            <div class="mb-3">
+                                <label for="motivation" class="form-label">Motivation</label>
+                                <input id="motivation" v-model="currentCharacter.motivation" type="text"
+                                    class="form-control" placeholder="Enter motivation">
+                            </div>
+
+                            <!-- Discouragement -->
+                            <div class="mb-3">
+                                <label for="discouragement" class="form-label">Discouragement</label>
+                                <input id="discouragement" v-model="currentCharacter.discouragement" type="text"
+                                    class="form-control" placeholder="Enter discouragement">
+                            </div>
+
+                            <!-- Confidence Level -->
+                            <div class="mb-3">
+                                <label for="confidenceLevel" class="form-label">Confidence Level</label>
+                                <input id="confidenceLevel" v-model="currentCharacter.confidenceLevel" type="text"
+                                    class="form-control" placeholder="Enter confidence level">
+                            </div>
+
+                            <!-- Greatest Fear -->
+                            <div class="mb-3">
+                                <label for="greatestFear" class="form-label">Greatest Fear</label>
+                                <input id="greatestFear" v-model="currentCharacter.greatestFear" type="text"
+                                    class="form-control" placeholder="Enter greatest fear">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- History Section Toggle -->
+                    <div>
+                        <button class="btn btn-secondary" @click="historyAttributesVisible = !historyAttributesVisible">
+                            History
+                        </button>
+                        <div v-if="historyAttributesVisible">
+                            <h3>History</h3>
+
+                            <!-- Childhood -->
+                            <div class="mb-3">
+                                <label for="childhood" class="form-label">Childhood</label>
+                                <input id="childhood" v-model="currentCharacter.childhood" type="text"
+                                    class="form-control" placeholder="Enter childhood details">
+                            </div>
+
+                            <!-- Important Past Events -->
+                            <div class="mb-3">
+                                <label for="importantPastEvents" class="form-label">Important Past Events</label>
+                                <input id="importantPastEvents" v-model="currentCharacter.importantPastEvents"
+                                    type="text" class="form-control" placeholder="Enter important past events">
+                            </div>
+
+                            <!-- Best Accomplishment -->
+                            <div class="mb-3">
+                                <label for="bestAccomplishment" class="form-label">Best Accomplishment</label>
+                                <input id="bestAccomplishment" v-model="currentCharacter.bestAccomplishment" type="text"
+                                    class="form-control" placeholder="Enter best accomplishment">
+                            </div>
+
+                            <!-- Failure -->
+                            <div class="mb-3">
+                                <label for="failure" class="form-label">Failure</label>
+                                <input id="failure" v-model="currentCharacter.failure" type="text" class="form-control"
+                                    placeholder="Enter failure details">
+                            </div>
+
+                            <!-- Secrets -->
+                            <div class="mb-3">
+                                <label for="secrets" class="form-label">Secrets</label>
+                                <input id="secrets" v-model="currentCharacter.secrets" type="text" class="form-control"
+                                    placeholder="Enter secrets">
+                            </div>
+
+                            <!-- Best Memories -->
+                            <div class="mb-3">
+                                <label for="bestMemories" class="form-label">Best Memories</label>
+                                <input id="bestMemories" v-model="currentCharacter.bestMemories" type="text"
+                                    class="form-control" placeholder="Enter best memories">
+                            </div>
+
+                            <!-- Worst Memories -->
+                            <div class="mb-3">
+                                <label for="worstMemories" class="form-label">Worst Memories</label>
+                                <input id="worstMemories" v-model="currentCharacter.worstMemories" type="text"
+                                    class="form-control" placeholder="Enter worst memories">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Story Section Toggle -->
+                    <div>
+                        <button class="btn btn-secondary" @click="storyAttributesVisible = !storyAttributesVisible">
+                            Story
+                        </button>
+                        <div v-if="storyAttributesVisible">
+                            <h3>Story</h3>
+
+                            <!-- Story Role -->
+                            <div class="mb-3">
+                                <label for="story-role" class="form-label">Story Role</label>
+                                <input id="story-role" v-model="currentCharacter.storyRole" type="text"
+                                    class="form-control" placeholder="Enter story role">
+                            </div>
+
+                            <!-- Short Term Goals -->
+                            <div class="mb-3">
+                                <label for="shortTermGoals" class="form-label">Short Term Goals</label>
+                                <input id="shortTermGoals" v-model="currentCharacter.shortTermGoals" type="text"
+                                    class="form-control" placeholder="Enter short term goals">
+                            </div>
+
+                            <!-- Long Term Goals -->
+                            <div class="mb-3">
+                                <label for="longTermGoals" class="form-label">Long Term Goals</label>
+                                <input id="longTermGoals" v-model="currentCharacter.longTermGoals" type="text"
+                                    class="form-control" placeholder="Enter long term goals">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <button class="btn btn-primary" @click="saveCharacter">Save Changes</button>
+                    <button class="btn btn-secondary" @click="navigateTo('characters')">Cancel</button>
+                </div>
+            </div>
     </div>
 
-    <!-- Bootstrap JS and Popper.js -->
+
+    <!-- Bootstrap 5 JS and Popper.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
     <script>
         new Vue({
             el: '#app',
-            data: {
-                currentPage: 'home', // Default to home page
-                projects: [],
-                selectedProject: null,
-                projectName: '',
-                projectDescription: '',
-                chapterName: '',
-                currentChapter: null,
-                currentChapterContent: '',
-                colorOptions: [
-                    { name: 'Red', hex: '#ff0000' },
-                    { name: 'Green', hex: '#00ff00' },
-                    { name: 'Blue', hex: '#0000ff' },
-                    { name: 'Yellow', hex: '#ffff00' },
-                    { name: 'Purple', hex: '#800080' },
-                    { name: 'Orange', hex: '#ffa500' }
-                ]
+            data() {
+                return {
+                    currentPage: 'home',
+                    selectedProject: null,
+                    currentCharacterProfile: null,
+                    projectName: '',
+                    projectDescription: '',
+                    projects: [],
+                    chapterName: '',
+                    chapterColor: '#ffffff',
+                    currentChapter: null,
+                    currentChapterContent: '',
+                    colorOptions: [
+                        { name: 'Not Started', hex: '#FF5733' },
+                        { name: 'Outlining', hex: '#f29429' },
+                        { name: 'Writing', hex: '#ffe600' },
+                        { name: 'First draft done', hex: '#96d2ff' },
+                        { name: 'Revised draft done', hex: '#3df5b8' },
+                        { name: 'Finished', hex: '#00a105' }
+                    ],
+                    // Add toggle properties for each section
+                    characterAttributesVisible: false,
+                    appearanceAttributesVisible: false,
+                    personalityAttributesVisible: false,
+                    historyAttributesVisible: false,
+                    storyAttributesVisible: false,
+                    newLocation: {
+                        name: '',
+                        description: '',
+                        avatar: null
+                    },
+                    newCharacter: {
+                        name: '',
+                        description: '',
+                        avatar: null,
+                        characterVisible: true,
+                        appearanceVisible: false,
+                        personalityVisible: false,
+                        historyVisible: false,
+                        storyVisible: false,
+                        character: {
+                            age: '',
+                            gender: '',
+                            pronouns: '',
+                            dob: '',
+                            job: '',
+                            jobSatisfaction: '',
+                            health: '',
+                            relationships: '',
+                            pets: '',
+                            world: '',
+                            areaOfResidence: '',
+                            neighbourhood: '',
+                            homeDescription: ''
+                        },
+                        appearance: {
+                            height: '',
+                            weight: '',
+                            ethnicity: '',
+                            skinTone: '',
+                            eyeColor: '',
+                            distinguishingFeatures: '',
+                            facialFeatures: '',
+                            hairstyle: '',
+                            bodyType: '',
+                            clothingStyle: '',
+                            accessories: ''
+                        },
+                        personality: {
+                            skills: '',
+                            incompetence: '',
+                            talent: '',
+                            weakness: '',
+                            hobbies: '',
+                            habits: '',
+                            moral: '',
+                            selfControl: '',
+                            motivation: '',
+                            discouragement: '',
+                            confidenceLevel: '',
+                            greatestFear: ''
+                        },
+                        history: {
+                            childhood: '',
+                            importantPastEvents: '',
+                            bestAccomplishment: '',
+                            failure: '',
+                            secrets: '',
+                            bestMemories: '',
+                            worstMemories: ''
+                        },
+                        story: {
+                            storyRole: '',
+                            shortTermGoals: '',
+                            longTermGoals: ''
+                        }
+                    }, currentCharacter: {
+                        name: '',
+                        description: '',
+                        avatar: null,
+                        characterVisible: true,
+                        appearanceVisible: false,
+                        personalityVisible: false,
+                        historyVisible: false,
+                        storyVisible: false,
+                        character: {
+                            age: '',
+                            gender: '',
+                            pronouns: '',
+                            dob: '',
+                            job: '',
+                            jobSatisfaction: '',
+                            health: '',
+                            relationships: '',
+                            pets: '',
+                            world: '',
+                            areaOfResidence: '',
+                            neighbourhood: '',
+                            homeDescription: ''
+                        },
+                        appearance: {
+                            height: '',
+                            weight: '',
+                            ethnicity: '',
+                            skinTone: '',
+                            eyeColor: '',
+                            distinguishingFeatures: '',
+                            facialFeatures: '',
+                            hairstyle: '',
+                            bodyType: '',
+                            clothingStyle: '',
+                            accessories: ''
+                        },
+                        personality: {
+                            skills: '',
+                            incompetence: '',
+                            talent: '',
+                            weakness: '',
+                            hobbies: '',
+                            habits: '',
+                            moral: '',
+                            selfControl: '',
+                            motivation: '',
+                            discouragement: '',
+                            confidenceLevel: '',
+                            greatestFear: ''
+                        },
+                        history: {
+                            childhood: '',
+                            importantPastEvents: '',
+                            bestAccomplishment: '',
+                            failure: '',
+                            secrets: '',
+                            bestMemories: '',
+                            worstMemories: ''
+                        },
+                        story: {
+                            storyRole: '',
+                            shortTermGoals: '',
+                            longTermGoals: ''
+                        }
+                    }
+                };
+
+            },
+            mounted() {
+                const storedProjects = localStorage.getItem('projects');
+                if (storedProjects) {
+                    this.projects = JSON.parse(storedProjects);
+                }
             },
             methods: {
                 navigateTo(page, project = null) {
-                    if (page === 'project') {
+                    if (project) {
                         this.selectedProject = project;
+                        this.currentCharacterProfile = null;
                     }
                     this.currentPage = page;
+                },
+                showCharacterProfile(character, index) {
+                    // Display the clicked character's profile
+                    this.currentCharacterProfile = { ...character };
+                    this.currentPage = 'characterProfiles'; // Make sure we're on the correct page
+                },
+                closeCharacterProfile() {
+                    // Close the character profile view by setting it to null
+                    this.currentCharacterProfile = null;
                 },
                 createProject() {
                     const newProject = {
                         id: Date.now(),
                         name: this.projectName,
                         description: this.projectDescription,
-                        chapters: []
+                        chapters: [],
+                        characters: [] // Initialize the characters array for new projects
                     };
                     this.projects.push(newProject);
-                    localStorage.setItem('projects', JSON.stringify(this.projects));
+                    this.saveToLocalStorage();
+                    this.projectName = '';
+                    this.projectDescription = '';
                     this.navigateTo('home');
                 },
-                addChapter() {
-                    if (this.chapterName) {
-                        const newChapter = {
-                            name: this.chapterName,
-                            content: '',
-                            color: '',
-                            showColorPicker: false
+                saveToLocalStorage() {
+                    localStorage.setItem('projects', JSON.stringify(this.projects));
+                },
+                addCharacter() {
+                    if (this.newCharacter.name && this.newCharacter.description) {
+                        if (!this.selectedProject.characters) {
+                            this.selectedProject.characters = [];
+                        }
+
+                        const newCharacter = {
+                            name: this.newCharacter.name,
+                            description: this.newCharacter.description,
+                            avatar: this.newCharacter.avatar
                         };
-                        this.selectedProject.chapters.push(newChapter);
-                        localStorage.setItem('projects', JSON.stringify(this.projects));
+                        this.selectedProject.characters.push(newCharacter);
+                        this.saveToLocalStorage();
+                        this.newCharacter.name = '';
+                        this.newCharacter.description = '';
+                        this.newCharacter.avatar = null;
+                    } else {
+                        alert('Please fill out all fields for the character!');
                     }
                 },
-                openChapterEditor(chapter, index) {
+
+                // Edit Character
+                editCharacter(character, index) {
+                    this.currentCharacter = { ...character, index };
+                    this.navigateTo('editCharacter');
+                },
+
+                // Confirm Deletion of Character
+                confirmDeleteCharacter(index) {
+                    if (confirm('Are you sure you want to delete this character?')) {
+                        this.selectedProject.characters.splice(index, 1);
+                        this.saveToLocalStorage();
+                    }
+                },
+
+                // Save character changes after editing
+                saveCharacter() {
+                    if (this.currentCharacter && this.currentCharacter.index !== undefined) {
+                        this.selectedProject.characters[this.currentCharacter.index] = this.currentCharacter;
+                        this.saveToLocalStorage();
+                        this.navigateTo('characters');
+                    }
+                },
+
+                // Avatar Upload Function
+                uploadAvatar(characterType, event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this[characterType].avatar = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                },
+
+                editProject(project) {
+                    this.projectName = project.name;
+                    this.projectDescription = project.description;
+                    this.selectedProject = project;
+                    this.navigateTo('project');
+                },
+                confirmDeleteProject(project) {
+                    if (confirm('Are you sure you want to delete this project?')) {
+                        const index = this.projects.indexOf(project);
+                        if (index > -1) {
+                            this.projects.splice(index, 1);
+                            this.selectedProject = null;
+                            this.saveToLocalStorage();
+                            this.navigateTo('home');
+                        }
+                    }
+                },
+                addChapter() {
+                    const newChapter = {
+                        name: this.chapterName,
+                        color: this.chapterColor,
+                        content: '',
+                        showColorPicker: false
+                    };
+                    this.selectedProject.chapters.push(newChapter);
+                    this.saveToLocalStorage();
+                    this.chapterName = '';
+                    this.chapterColor = '#ffffff';
+                },
+                openChapterEditor(chapter) {
                     this.currentChapter = chapter;
-                    this.currentChapterIndex = index;
                     this.currentChapterContent = chapter.content;
                     this.navigateTo('editor');
                 },
                 saveChapterContent() {
                     if (this.currentChapter) {
-                        this.selectedProject.chapters[this.currentChapterIndex].content = this.currentChapterContent;
-                        localStorage.setItem('projects', JSON.stringify(this.projects));
+                        this.currentChapter.content = this.currentChapterContent;
+                        this.saveToLocalStorage();
                         this.navigateTo('writing');
                     }
-                },
-                toggleColorPicker(chapter) {
-                    chapter.showColorPicker = !chapter.showColorPicker;
-                },
-                changeChapterColor(chapter, color) {
-                    chapter.color = color;
-                    chapter.showColorPicker = false;
-                    localStorage.setItem('projects', JSON.stringify(this.projects));
                 },
                 confirmDeleteChapter(index) {
                     if (confirm('Are you sure you want to delete this chapter?')) {
                         this.selectedProject.chapters.splice(index, 1);
-                        localStorage.setItem('projects', JSON.stringify(this.projects));
+                        this.saveToLocalStorage();
                     }
-                }
-            },
-            mounted() {
-                const storedProjects = JSON.parse(localStorage.getItem('projects'));
-                if (storedProjects) {
-                    this.projects = storedProjects;
+                },
+                toggleColorPicker(chapter) {
+                    chapter.showColorPicker = !chapter.showColorPicker;
+                    this.$forceUpdate();
+                },
+                changeChapterColor(chapter, color) {
+                    chapter.color = color;
+                    chapter.showColorPicker = false;
+                    this.saveToLocalStorage();
+                },
+                toggleVisibility(section) {
+                    if (section === 'character') {
+                        this.currentCharacter.characterVisible = !this.currentCharacter.characterVisible;
+                    } else if (section === 'appearance') {
+                        this.currentCharacter.appearanceVisible = !this.currentCharacter.appearanceVisible;
+                    } else if (section === 'personality') {
+                        this.currentCharacter.personalityVisible = !this.currentCharacter.personalityVisible;
+                    } else if (section === 'history') {
+                        this.currentCharacter.historyVisible = !this.currentCharacter.historyVisible;
+                    } else if (section === 'story') {
+                        this.currentCharacter.storyVisible = !this.currentCharacter.storyVisible;
+                    }
+                },
+                addLocation() {
+                    if (this.newLocation.name && this.newLocation.description) {
+                        // Ensure the locations array exists
+                        if (!this.selectedProject.locations) {
+                            this.selectedProject.locations = [];
+                        }
+
+                        // Create a new location object
+                        const newLocation = {
+                            name: this.newLocation.name,
+                            description: this.newLocation.description,
+                            avatar: this.newLocation.avatar
+                        };
+
+                        // Add the new location to the selected project's locations array
+                        this.selectedProject.locations.push(newLocation);
+
+                        // Optionally, save the project to local storage (if needed)
+                        this.saveToLocalStorage();
+
+                        // Reset the form fields
+                        this.newLocation.name = '';
+                        this.newLocation.description = '';
+                        this.newLocation.avatar = null;
+                    } else {
+                        alert('Please fill out all fields for the location!');
+                    }
+                },
+
+
+                // Method to upload avatar image
+                uploadAvatar(locationKey, event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this[locationKey].avatar = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                },
+
+                // Method to edit location
+                editLocation(location, index) {
+                    // Set the form with the selected location's data for editing
+                    this.newLocation = { ...location, index };
+                },
+
+                // Method to confirm deletion of location
+                confirmDeleteLocation(index) {
+                    if (confirm('Are you sure you want to delete this location?')) {
+                        this.selectedProject.locations.splice(index, 1);
+                    }
                 }
             }
         });
     </script>
+
 </body>
+
 </html>
