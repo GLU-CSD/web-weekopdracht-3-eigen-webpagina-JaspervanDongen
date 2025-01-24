@@ -27,7 +27,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" @click.prevent="navigateTo('home')">Home</a>
+                            <a class="nav-link" href="#" @click.prevent="navigateTo('project')">Home</a>
                         </li>
                         <!-- Dropdown for Sections -->
                         <li class="nav-item dropdown">
@@ -40,17 +40,6 @@
                                         Overview</a></li>
                                 <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('editor')">Chapter
                                         Editor</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarStory" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Story
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarStory">
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('story')">Story
-                                        Overview</a></li>
-                                <li><a class="dropdown-item" href="#">Plot Points</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -71,21 +60,19 @@
                                 Worldbuilding
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarWorldbuilding">
-                                <li><a class="dropdown-item" href="#" @click.prevent="navigateTo('worldbuilding')">World
+                                <li><a class="dropdown-item" href="#"
+                                        @click.prevent="navigateTo('worldbuilding')">Location
                                         Management</a></li>
-                                <li><a class="dropdown-item" href="#">Locations</a></li>
-                                <li><a class="dropdown-item" href="#">Species</a></li>
-                                <li><a class="dropdown-item" href="#">Items</a></li>
-                                <li><a class="dropdown-item" href="#">Languages</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        @click.prevent="navigateTo('locationProfiles')">Location
+                                        Profiles</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        @click.prevent="navigateTo('editSpeciesLanguagesItems')">Species, Items &
+                                        Languages</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </nav>
 
@@ -117,8 +104,6 @@
                                 Options
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" href="#" @click="editProject(project)">Edit Project</a>
-                                </li>
                                 <li><a class="dropdown-item" href="#" @click="confirmDeleteProject(project)">Delete
                                         Project</a></li>
                             </ul>
@@ -133,20 +118,12 @@
                 <p>{{ selectedProject.description }}</p>
                 <div class="btn-group mb-3">
                     <button class="btn btn-secondary" @click="navigateTo('writing')">Writing</button>
-                    <button class="btn btn-secondary" @click="navigateTo('story')">Story</button>
                     <button class="btn btn-secondary" @click="navigateTo('characters')">Characters</button>
                     <button class="btn btn-secondary" @click="navigateTo('worldbuilding')">Worldbuilding</button>
-                    <!-- Project Settings Dropdown -->
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Project Settings
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Edit Project</a></li>
-                        <li><a class="dropdown-item" href="#">Delete Project</a></li>
-                    </ul>
                 </div>
             </div>
+        
+            
 
 
 
@@ -224,7 +201,7 @@
                     <li v-for="(location, index) in selectedProject.locations" :key="location.name + index"
                         class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
                         <div class="d-flex align-items-center">
-                            <span @click="editLocation(location, index)" class="ms-2"><strong>Name:</strong> {{
+                            <span @click="editLocation(location, index)" class="ms-2"><strong>Location:</strong> {{
                                 location.name }}</span>
                             <img v-if="location.avatar" :src="location.avatar" alt="Avatar" class="avatar-thumbnail" />
                         </div>
@@ -236,9 +213,505 @@
                 </ul>
             </div>
 
+            <!-- In the Species, Languages, and Items Edit Page section -->
+            <div v-if="currentPage === 'editSpeciesLanguagesItems' && selectedProject"
+                class="animate__animated animate__fadeIn">
+                <h1>Edit Species, Languages, and Items</h1>
+
+                <!-- Species Section -->
+                <div class="mb-3">
+                    <label for="edit-species-name" class="form-label">Species Name:</label>
+                    <input id="edit-species-name" v-model="currentSpecies.name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="edit-species-description" class="form-label">Species Description:</label>
+                    <textarea id="edit-species-description" v-model="currentSpecies.description"
+                        class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="edit-species-avatar" class="form-label">Species Image:</label>
+                    <input type="file" class="form-control" @change="uploadAvatar('currentSpecies', $event)" />
+                </div>
+                <div v-if="currentSpecies.avatar">
+                    <img :src="currentSpecies.avatar" alt="Image Preview" class="avatar-preview" />
+                </div>
+
+                <hr>
+
+                <!-- Languages Section -->
+                <div class="mb-3">
+                    <label for="edit-language-name" class="form-label">Language Name:</label>
+                    <input id="edit-language-name" v-model="currentLanguage.name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="edit-language-description" class="form-label">Language Description:</label>
+                    <textarea id="edit-language-description" v-model="currentLanguage.description"
+                        class="form-control"></textarea>
+                </div>
+
+                <hr>
+
+                <!-- Items Section -->
+                <div class="mb-3">
+                    <label for="edit-item-name" class="form-label">Item Name:</label>
+                    <input id="edit-item-name" v-model="currentItem.name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="edit-item-description" class="form-label">Item Description:</label>
+                    <textarea id="edit-item-description" v-model="currentItem.description"
+                        class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="edit-item-image" class="form-label">Item Image:</label>
+                    <input type="file" class="form-control" @change="uploadAvatar('currentItem', $event)" />
+                </div>
+                <div v-if="currentItem.avatar">
+                    <img :src="currentItem.avatar" alt="Image Preview" class="avatar-preview" />
+                </div>
+
+                <!-- Save and Cancel Buttons -->
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-success me-2" @click="saveSpeciesLanguagesItemsChanges">Save Changes</button>
+                    <button class="btn btn-secondary" @click="cancelEditSpeciesLanguagesItems">Cancel</button>
+                </div>
+            </div>
 
 
+            <!-- In the Location Edit Page section -->
+            <div v-if="currentPage === 'editLocation' && selectedProject && currentLocation"
+                class="animate__animated animate__fadeIn">
+                <h1>Edit Location</h1>
 
+                <div class="mb-3">
+                    <label for="edit-location-name" class="form-label">Location Name:</label>
+                    <input id="edit-location-name" v-model="currentLocation.name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="edit-location-description" class="form-label">Location Description:</label>
+                    <textarea id="edit-location-description" v-model="currentLocation.description"
+                        class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="edit-location-avatar" class="form-label">Location Image:</label>
+                    <input type="file" class="form-control" @change="uploadAvatar('currentLocation', $event)" />
+                </div>
+                <div v-if="currentLocation.avatar">
+                    <img :src="currentLocation.avatar" alt="Image Preview" class="avatar-preview" />
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-success me-2" @click="saveLocationChanges">Save Changes</button>
+                    <button class="btn btn-secondary" @click="cancelEditLocation">Cancel</button>
+                </div>
+
+                <!-- Attributes Section -->
+                <div class="attributes-section mt-4">
+                    <h3>Attributes</h3>
+
+                    <!-- Location Attributes -->
+                    <div>
+                        <button class="btn btn-secondary"
+                            @click="locationAttributesVisible = !locationAttributesVisible">
+                            Location
+                        </button>
+                        <div v-if="locationAttributesVisible">
+
+                            <!-- Dimensions -->
+                            <div class="mb-3">
+                                <label for="dimensions" class="form-label">Dimensions</label>
+                                <input id="dimensions" v-model="currentLocation.dimensions" type="text"
+                                    class="form-control" placeholder="Enter dimensions">
+                            </div>
+
+                            <!-- Objects -->
+                            <div class="mb-3">
+                                <label for="objects" class="form-label">Objects</label>
+                                <input id="objects" v-model="currentLocation.objects" type="text" class="form-control"
+                                    placeholder="Describe objects">
+                            </div>
+
+                            <!-- Condition -->
+                            <div class="mb-3">
+                                <label for="condition" class="form-label">Condition</label>
+                                <input id="condition" v-model="currentLocation.condition" type="text"
+                                    class="form-control" placeholder="Describe condition">
+                            </div>
+
+                            <!-- Feeling -->
+                            <div class="mb-3">
+                                <label for="feeling" class="form-label">Feeling</label>
+                                <input id="feeling" v-model="currentLocation.feeling" type="text" class="form-control"
+                                    placeholder="Describe the feeling">
+                            </div>
+
+                            <!-- Noises -->
+                            <div class="mb-3">
+                                <label for="noises" class="form-label">Noises</label>
+                                <input id="noises" v-model="currentLocation.noises" type="text" class="form-control"
+                                    placeholder="Describe noises">
+                            </div>
+
+                            <!-- Smell -->
+                            <div class="mb-3">
+                                <label for="smell" class="form-label">Smell</label>
+                                <input id="smell" v-model="currentLocation.smell" type="text" class="form-control"
+                                    placeholder="Describe smell">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Biology & Environment -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" @click="biologyAttributesVisible = !biologyAttributesVisible">
+                            Biology & Environment
+                        </button>
+                        <div v-if="biologyAttributesVisible">
+
+                            <!-- Climate -->
+                            <div class="mb-3">
+                                <label for="climate" class="form-label">Climate</label>
+                                <input id="climate" v-model="currentLocation.climate" type="text" class="form-control"
+                                    placeholder="Describe climate">
+                            </div>
+
+                            <!-- Landmarks -->
+                            <div class="mb-3">
+                                <label for="landmarks" class="form-label">Landmarks</label>
+                                <input id="landmarks" v-model="currentLocation.landmarks" type="text"
+                                    class="form-control" placeholder="Describe landmarks">
+                            </div>
+
+                            <!-- Flora -->
+                            <div class="mb-3">
+                                <label for="flora" class="form-label">Flora</label>
+                                <input id="flora" v-model="currentLocation.flora" type="text" class="form-control"
+                                    placeholder="Describe flora">
+                            </div>
+
+                            <!-- Fauna -->
+                            <div class="mb-3">
+                                <label for="fauna" class="form-label">Fauna</label>
+                                <input id="fauna" v-model="currentLocation.fauna" type="text" class="form-control"
+                                    placeholder="Describe fauna">
+                            </div>
+
+                            <!-- Bodies of Water -->
+                            <div class="mb-3">
+                                <label for="bodiesOfWater" class="form-label">Bodies of Water</label>
+                                <input id="bodiesOfWater" v-model="currentLocation.bodiesOfWater" type="text"
+                                    class="form-control" placeholder="Describe bodies of water">
+                            </div>
+
+                            <!-- Pollution -->
+                            <div class="mb-3">
+                                <label for="pollution" class="form-label">Pollution</label>
+                                <input id="pollution" v-model="currentLocation.pollution" type="text"
+                                    class="form-control" placeholder="Describe pollution levels">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Culture -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" @click="cultureAttributesVisible = !cultureAttributesVisible">
+                            Culture
+                        </button>
+                        <div v-if="cultureAttributesVisible">
+
+                            <!-- Inhabitants -->
+                            <div class="mb-3">
+                                <label for="inhabitants" class="form-label">Inhabitants</label>
+                                <input id="inhabitants" v-model="currentLocation.inhabitants" type="text"
+                                    class="form-control" placeholder="Describe inhabitants">
+                            </div>
+
+                            <!-- Language -->
+                            <div class="mb-3">
+                                <label for="language" class="form-label">Language</label>
+                                <input id="language" v-model="currentLocation.language" type="text" class="form-control"
+                                    placeholder="Describe language">
+                            </div>
+
+                            <!-- Rituals -->
+                            <div class="mb-3">
+                                <label for="rituals" class="form-label">Rituals</label>
+                                <input id="rituals" v-model="currentLocation.rituals" type="text" class="form-control"
+                                    placeholder="Describe rituals">
+                            </div>
+
+                            <!-- General Ethics -->
+                            <div class="mb-3">
+                                <label for="generalEthics" class="form-label">General Ethics</label>
+                                <textarea id="generalEthics" v-model="currentLocation.generalEthics"
+                                    class="form-control" placeholder="Describe general ethics"></textarea>
+                            </div>
+
+                            <!-- Art & Music -->
+                            <div class="mb-3">
+                                <label for="artMusic" class="form-label">Art & Music</label>
+                                <textarea id="artMusic" v-model="currentLocation.artMusic" class="form-control"
+                                    placeholder="Describe art and music"></textarea>
+                            </div>
+
+                            <!-- Views on Life -->
+                            <div class="mb-3">
+                                <label for="viewsOnLife" class="form-label">Views on Life</label>
+                                <textarea id="viewsOnLife" v-model="currentLocation.viewsOnLife" class="form-control"
+                                    placeholder="Describe views on life"></textarea>
+                            </div>
+
+                            <!-- Views of Death -->
+                            <div class="mb-3">
+                                <label for="viewsOnDeath" class="form-label">Views on Death</label>
+                                <textarea id="viewsOnDeath" v-model="currentLocation.viewsOnDeath" class="form-control"
+                                    placeholder="Describe views of death"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Politics -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary"
+                            @click="politicsAttributesVisible = !politicsAttributesVisible">
+                            Politics
+                        </button>
+                        <div v-if="politicsAttributesVisible">
+
+                            <!-- Government System -->
+                            <div class="mb-3">
+                                <label for="governmentSystem" class="form-label">Government System</label>
+                                <input id="governmentSystem" v-model="currentLocation.governmentSystem" type="text"
+                                    class="form-control" placeholder="Describe government system">
+                            </div>
+
+                            <!-- Political Parties -->
+                            <div class="mb-3">
+                                <label for="politicalParties" class="form-label">Political Parties</label>
+                                <input id="politicalParties" v-model="currentLocation.politicalParties" type="text"
+                                    class="form-control" placeholder="List political parties">
+                            </div>
+
+                            <!-- Important Political Figures -->
+                            <div class="mb-3">
+                                <label for="importantPoliticalFigures" class="form-label">Important Political
+                                    Figures</label>
+                                <input id="importantPoliticalFigures"
+                                    v-model="currentLocation.importantPoliticalFigures" type="text" class="form-control"
+                                    placeholder="List important political figures">
+                            </div>
+
+                            <!-- Opinion of the Public -->
+                            <div class="mb-3">
+                                <label for="opinionOfPublic" class="form-label">Opinion of the Public</label>
+                                <textarea id="opinionOfPublic" v-model="currentLocation.opinionOfPublic"
+                                    class="form-control" placeholder="Describe public opinion"></textarea>
+                            </div>
+
+                            <!-- Laws -->
+                            <div class="mb-3">
+                                <label for="laws" class="form-label">Laws</label>
+                                <textarea id="laws" v-model="currentLocation.laws" class="form-control"
+                                    placeholder="Describe laws"></textarea>
+                            </div>
+
+                            <!-- Punishments -->
+                            <div class="mb-3">
+                                <label for="punishments" class="form-label">Punishments</label>
+                                <textarea id="punishments" v-model="currentLocation.punishments" class="form-control"
+                                    placeholder="Describe punishments"></textarea>
+                            </div>
+
+                            <!-- Law Enforcement -->
+                            <div class="mb-3">
+                                <label for="lawEnforcement" class="form-label">Law Enforcement</label>
+                                <textarea id="lawEnforcement" v-model="currentLocation.lawEnforcement"
+                                    class="form-control" placeholder="Describe law enforcement"></textarea>
+                            </div>
+
+                            <!-- Opposing Forces -->
+                            <div class="mb-3">
+                                <label for="opposingForces" class="form-label">Opposing Forces</label>
+                                <textarea id="opposingForces" v-model="currentLocation.opposingForces"
+                                    class="form-control" placeholder="Describe opposing forces"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Magic & Technology -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" @click="magicAttributesVisible = !magicAttributesVisible">
+                            Magic & Technology
+                        </button>
+                        <div v-if="magicAttributesVisible">
+
+                            <!-- Magic -->
+                            <div class="mb-3">
+                                <label for="magic" class="form-label">Magic</label>
+                                <textarea id="magic" v-model="currentLocation.magic" class="form-control"
+                                    placeholder="Describe magic"></textarea>
+                            </div>
+
+                            <!-- Technological Level -->
+                            <div class="mb-3">
+                                <label for="technologicalLevel" class="form-label">Technological Level</label>
+                                <textarea id="technologicalLevel" v-model="currentLocation.technologicalLevel"
+                                    class="form-control" placeholder="Describe technological level"></textarea>
+                            </div>
+
+                            <!-- Unique Technologies -->
+                            <div class="mb-3">
+                                <label for="uniqueTechnologies" class="form-label">Unique Technologies</label>
+                                <textarea id="uniqueTechnologies" v-model="currentLocation.uniqueTechnologies"
+                                    class="form-control" placeholder="Describe unique technologies"></textarea>
+                            </div>
+
+                            <!-- Medicine & Health Care -->
+                            <div class="mb-3">
+                                <label for="medicineHealthCare" class="form-label">Medicine & Health Care</label>
+                                <textarea id="medicineHealthCare" v-model="currentLocation.medicineHealthCare"
+                                    class="form-control" placeholder="Describe medicine and health care"></textarea>
+                            </div>
+
+                            <!-- Ethical Controversies -->
+                            <div class="mb-3">
+                                <label for="ethicalControversies" class="form-label">Ethical Controversies</label>
+                                <textarea id="ethicalControversies" v-model="currentLocation.ethicalControversies"
+                                    class="form-control" placeholder="Describe ethical controversies"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" @click="historyAttributesVisible = !historyAttributesVisible">
+                            History
+                        </button>
+                        <div v-if="historyAttributesVisible">
+
+                            <!-- Date Founded -->
+                            <div class="mb-3">
+                                <label for="dateFounded" class="form-label">Date Founded</label>
+                                <input id="dateFounded" v-model="currentLocation.dateFounded" type="text"
+                                    class="form-control" placeholder="Enter date founded">
+                            </div>
+
+                            <!-- Founder -->
+                            <div class="mb-3">
+                                <label for="founder" class="form-label">Founder</label>
+                                <input id="founder" v-model="currentLocation.founder" type="text" class="form-control"
+                                    placeholder="Enter founder">
+                            </div>
+
+                            <!-- Major Events -->
+                            <div class="mb-3">
+                                <label for="majorEvents" class="form-label">Major Events</label>
+                                <textarea id="majorEvents" v-model="currentLocation.majorEvents" class="form-control"
+                                    placeholder="Describe major events"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Religion -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary"
+                            @click="religionAttributesVisible = !religionAttributesVisible">
+                            Religion
+                        </button>
+                        <div v-if="religionAttributesVisible">
+
+                            <!-- Deities -->
+                            <div class="mb-3">
+                                <label for="deities" class="form-label">Deities</label>
+                                <textarea id="deities" v-model="currentLocation.deities" class="form-control"
+                                    placeholder="Describe deities"></textarea>
+                            </div>
+
+                            <!-- Religious Groups -->
+                            <div class="mb-3">
+                                <label for="religiousGroups" class="form-label">Religious Groups</label>
+                                <textarea id="religiousGroups" v-model="currentLocation.religiousGroups"
+                                    class="form-control" placeholder="Describe religious groups"></textarea>
+                            </div>
+
+                            <!-- Religious Leaders & Prophets -->
+                            <div class="mb-3">
+                                <label for="religiousLeaders" class="form-label">Religious Leaders & Prophets</label>
+                                <textarea id="religiousLeaders" v-model="currentLocation.religiousLeaders"
+                                    class="form-control"
+                                    placeholder="Describe religious leaders and prophets"></textarea>
+                            </div>
+
+                            <!-- Religious Values -->
+                            <div class="mb-3">
+                                <label for="religiousValues" class="form-label">Religious Values & Commandments</label>
+                                <textarea id="religiousValues" v-model="currentLocation.religiousValues"
+                                    class="form-control"
+                                    placeholder="Describe religious values and commandments"></textarea>
+                            </div>
+
+                            <!-- Government View -->
+                            <div class="mb-3">
+                                <label for="governmentViewReligion" class="form-label">Government View on
+                                    Religion</label>
+                                <textarea id="governmentViewReligion" v-model="currentLocation.governmentViewReligion"
+                                    class="form-control"
+                                    placeholder="Describe government's view on religion"></textarea>
+                            </div>
+
+                            <!-- Freedom of Religion -->
+                            <div class="mb-3">
+                                <label for="freedomReligion" class="form-label">Freedom of Religion</label>
+                                <textarea id="freedomReligion" v-model="currentLocation.freedomReligion"
+                                    class="form-control" placeholder="Describe freedom of religion"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Economy -->
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" @click="tradeAttributesVisible = !tradeAttributesVisible">
+                            Economy
+                        </button>
+                        <div v-if="tradeAttributesVisible">
+
+                            <!-- Currency -->
+                            <div class="mb-3">
+                                <label for="currency" class="form-label">Currency</label>
+                                <textarea id="currency" v-model="currentLocation.currency" class="form-control"
+                                    placeholder="Describe currency"></textarea>
+                            </div>
+
+                            <!-- War -->
+                            <div class="mb-3">
+                                <label for="war" class="form-label">War</label>
+                                <textarea id="war" v-model="currentLocation.war" class="form-control"
+                                    placeholder="Describe wars"></textarea>
+                            </div>
+
+                            <!-- Trade Partners -->
+                            <div class="mb-3">
+                                <label for="tradePartners" class="form-label">Trade Partners</label>
+                                <textarea id="tradePartners" v-model="currentLocation.tradePartners"
+                                    class="form-control" placeholder="List trade partners"></textarea>
+                            </div>
+
+                            <!-- Major imports -->
+                            <div class="mb-3">
+                                <label for="products" class="form-label">Major imports</label>
+                                <textarea id="products" v-model="currentLocation.products" class="form-control"
+                                    placeholder="Major imports"></textarea>
+                            </div>
+
+                            <!-- Marjor exports -->
+                            <div class="mb-3">
+                                <label for="relationsNeighbors" class="form-label">Major exports</label>
+                                <textarea id="relationsNeighbors" v-model="currentLocation.relationsNeighbors"
+                                    class="form-control" placeholder="Major exports"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Character Profiles Page -->
             <div v-if="currentPage === 'characterProfiles' && selectedProject"
@@ -414,455 +887,694 @@
                 </div>
             </div>
 
+            <!-- Location Profiles Page -->
+            <div v-if="currentPage === 'locationProfiles' && selectedProject" class="animate__animated animate__fadeIn">
+                <h1>Location Profiles</h1>
 
-
-
-            <!-- Character Management Page -->
-            <div v-if="currentPage === 'characters' && selectedProject" class="animate__animated animate__fadeIn">
-                <h1>Character Management</h1>
-                <!-- Add New Character Form -->
-                <div class="mb-3">
-                    <label for="character-name" class="form-label">Character Name:</label>
-                    <input id="character-name" v-model="newCharacter.name" type="text" class="form-control"
-                        placeholder="Enter character name" />
-                </div>
-                <div class="mb-3">
-                    <label for="character-description" class="form-label">Character Description:</label>
-                    <textarea id="character-description" v-model="newCharacter.description" class="form-control"
-                        placeholder="Enter character description"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="character-avatar" class="form-label">Character Avatar:</label>
-                    <input type="file" class="form-control" @change="uploadAvatar('newCharacter', $event)" />
-                </div>
-                <button class="btn btn-success" @click="addCharacter">Add Character</button>
-
-                <!-- Existing Characters List -->
-                <h2 class="mt-4">Existing Characters</h2>
+                <!-- Location List -->
                 <ul class="list-group">
-                    <li v-for="(character, index) in selectedProject.characters" :key="character.name + index"
+                    <li v-for="(location, index) in selectedProject.locations" :key="location.name + index"
                         class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
                         <div class="d-flex align-items-center">
-                            <span @click="editCharacter(character, index)" class="ms-2"><strong>Name:</strong> {{
-                                character.name }}</span>
-                            <img v-if="character.avatar" :src="character.avatar" alt="Avatar"
-                                class="avatar-thumbnail" />
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-warning btn-sm"
-                                @click="editCharacter(character, index)">Edit</button>
-                            <button class="btn btn-danger btn-sm" @click="confirmDeleteCharacter(index)">Delete</button>
+                            <span @click="showLocationProfile(location, index)" class="ms-2">
+                                <strong>{{ location.name }}</strong>
+                            </span>
+                            <img v-if="location.image" :src="location.image" alt="Location Image"
+                                class="location-thumbnail" />
                         </div>
                     </li>
                 </ul>
-            </div>
 
-            <!-- In the Character Edit Page section -->
-            <div v-if="currentPage === 'editCharacter' && selectedProject && currentCharacter"
-                class="animate__animated animate__fadeIn">
-                <h1>Edit Character</h1>
+                <!-- Location Attributes Modal -->
+                <div v-if="currentLocationProfile" class="location-profile mt-4">
+                    <h2>{{ currentLocationProfile.name }}'s Profile</h2>
 
-                <div class="mb-3">
-                    <label for="edit-character-name" class="form-label">Character Name:</label>
-                    <input id="edit-character-name" v-model="currentCharacter.name" type="text" class="form-control" />
+                    <!-- Accordion for organized sections -->
+                    <div id="accordion">
+
+                        <!-- Location Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingAttributes">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#collapseAttributes" aria-expanded="true"
+                                        aria-controls="collapseAttributes">
+                                        Location
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseAttributes" class="collapse show" aria-labelledby="headingAttributes"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Dimensions:</strong> {{ currentLocationProfile.dimensions }}</p>
+                                    <p><strong>Objects:</strong> {{ currentLocationProfile.objects }}</p>
+                                    <p><strong>Condition:</strong> {{ currentLocationProfile.condition }}</p>
+                                    <p><strong>Feeling:</strong> {{ currentLocationProfile.feeling }}</p>
+                                    <p><strong>Noises:</strong> {{ currentLocationProfile.noises }}</p>
+                                    <p><strong>Smell:</strong> {{ currentLocationProfile.smell }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Environment Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingEnvironment">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#collapseEnvironment" aria-expanded="false"
+                                        aria-controls="collapseEnvironment">
+                                        Biology & Environment
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseEnvironment" class="collapse" aria-labelledby="headingEnvironment"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Climate:</strong> {{ currentLocationProfile.climate }}</p>
+                                    <p><strong>Landmarks:</strong> {{ currentLocationProfile.landmarks }}</p>
+                                    <p><strong>Flora:</strong> {{ currentLocationProfile.flora }}</p>
+                                    <p><strong>Fauna:</strong> {{ currentLocationProfile.fauna }}</p>
+                                    <p><strong>Bodies of Water:</strong> {{ currentLocationProfile.bodiesOfWater }}</p>
+                                    <p><strong>Pollution:</strong> {{ currentLocationProfile.pollution }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Culture Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingSociety">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseSociety"
+                                        aria-expanded="false" aria-controls="collapseSociety">
+                                        Culture
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseSociety" class="collapse" aria-labelledby="headingSociety"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Inhabitants:</strong> {{ currentLocationProfile.inhabitants }}</p>
+                                    <p><strong>Language:</strong> {{ currentLocationProfile.language }}</p>
+                                    <p><strong>Rituals:</strong> {{ currentLocationProfile.rituals }}</p>
+                                    <p><strong>General Ethics:</strong> {{ currentLocationProfile.generalEthics }}</p>
+                                    <p><strong>Art & Music:</strong> {{ currentLocationProfile.artAndMusic }}</p>
+                                    <p><strong>Views on Life:</strong> {{ currentLocationProfile.viewsOnLife }}</p>
+                                    <p><strong>Views on Death:</strong> {{ currentLocationProfile.viewsOnDeath }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Politics Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingGovernment">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#collapseGovernment" aria-expanded="false"
+                                        aria-controls="collapseGovernment">
+                                        Politics
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseGovernment" class="collapse" aria-labelledby="headingGovernment"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Government System:</strong> {{ currentLocationProfile.governmentSystem }}
+                                    </p>
+                                    <p><strong>Political Parties:</strong> {{ currentLocationProfile.politicalParties }}
+                                    </p>
+                                    <p><strong>Important Political Figures:</strong> {{
+                                        currentLocationProfile.importantPoliticalFigures }}</p>
+                                    <p><strong>Opinion of the Public:</strong> {{
+                                        currentLocationProfile.opinionOfThePublic }}</p>
+                                    <p><strong>Laws:</strong> {{ currentLocationProfile.laws }}</p>
+                                    <p><strong>Punishments:</strong> {{ currentLocationProfile.punishments }}</p>
+                                    <p><strong>Law Enforcement:</strong> {{ currentLocationProfile.lawEnforcement }}</p>
+                                    <p><strong>Opposing Forces:</strong> {{ currentLocationProfile.opposingForces }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technology Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingTechnology">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#collapseTechnology" aria-expanded="false"
+                                        aria-controls="collapseTechnology">
+                                        Magic & Technology
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTechnology" class="collapse" aria-labelledby="headingTechnology"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Magic:</strong> {{ currentLocationProfile.magic }}</p>
+                                    <p><strong>Technological Level:</strong> {{
+                                        currentLocationProfile.technologicalLevel }}</p>
+                                    <p><strong>Unique Technologies:</strong> {{
+                                        currentLocationProfile.uniqueTechnologies }}</p>
+                                    <p><strong>Medicine & Health Care:</strong> {{
+                                        currentLocationProfile.medicineAndHealthCare }}</p>
+                                    <p><strong>Ethical Controversies:</strong> {{
+                                        currentLocationProfile.ethicalControversies }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingHistory">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseHistory"
+                                        aria-expanded="false" aria-controls="collapseHistory">
+                                        History
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseHistory" class="collapse" aria-labelledby="headingHistory"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Date Founded:</strong> {{ currentLocationProfile.dateFounded }}</p>
+                                    <p><strong>Founder:</strong> {{ currentLocationProfile.founder }}</p>
+                                    <p><strong>Major Events:</strong> {{ currentLocationProfile.majorEvents }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Religion Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingReligion">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseReligion"
+                                        aria-expanded="false" aria-controls="collapseReligion">
+                                        Religion
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseReligion" class="collapse" aria-labelledby="headingReligion"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Deities:</strong> {{ currentLocationProfile.deities }}</p>
+                                    <p><strong>Religious Groups:</strong> {{ currentLocationProfile.religiousGroups }}
+                                    </p>
+                                    <p><strong>Religious Leaders & Prophets:</strong> {{
+                                        currentLocationProfile.religiousLeadersAndProphets }}</p>
+                                    <p><strong>Religious Values & Commandments:</strong> {{
+                                        currentLocationProfile.religiousValuesAndCommandments }}</p>
+                                    <p><strong>Government View on Religion:</strong> {{
+                                        currentLocationProfile.governmentViewOnReligion }}</p>
+                                    <p><strong>Freedom of Religion:</strong> {{ currentLocationProfile.freedomOfReligion
+                                        }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Economy Section -->
+                        <div class="card">
+                            <div class="card-header" id="headingEconomy">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseEconomy"
+                                        aria-expanded="false" aria-controls="collapseEconomy">
+                                        Economy
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseEconomy" class="collapse" aria-labelledby="headingEconomy"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <p><strong>Currency:</strong> {{ currentLocationProfile.currency }}</p>
+                                    <p><strong>War:</strong> {{ currentLocationProfile.war }}</p>
+                                    <p><strong>Trade Partners:</strong> {{ currentLocationProfile.tradePartners }}</p>
+                                    <p><strong>Products:</strong> {{ currentLocationProfile.products }}</p>
+                                    <p><strong>Relations with Neighbors:</strong> {{
+                                        currentLocationProfile.relationsWithNeighbors }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Close Button -->
+                    <button class="btn btn-secondary" @click="closeLocationProfile">Close</button>
                 </div>
-                <div class="mb-3">
-                    <label for="edit-character-description" class="form-label">Character Description:</label>
-                    <textarea id="edit-character-description" v-model="currentCharacter.description"
-                        class="form-control"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="edit-character-avatar" class="form-label">Character Avatar:</label>
-                    <input type="file" class="form-control" @change="uploadAvatar('currentCharacter', $event)" />
-                </div>
-                <div v-if="currentCharacter.avatar">
-                    <img :src="currentCharacter.avatar" alt="Avatar Preview" class="avatar-preview" />
                 </div>
 
-                <!-- Attributes Section -->
-                <div class="attributes-section mt-4">
-                    <h3>Attributes</h3>
 
-                    <!-- Character Section Toggle -->
-                    <div>
-                        <button class="btn btn-secondary"
-                            @click="characterAttributesVisible = !characterAttributesVisible">
-                            Character
-                        </button>
-                        <div v-if="characterAttributesVisible">
 
-                            <!-- Age -->
-                            <div class="mb-3">
-                                <label for="age" class="form-label">Age</label>
-                                <input id="age" v-model="currentCharacter.age" type="text" class="form-control"
-                                    placeholder="Enter age">
+
+
+
+
+                <!-- Character Management Page -->
+                <div v-if="currentPage === 'characters' && selectedProject" class="animate__animated animate__fadeIn">
+                    <h1>Character Management</h1>
+                    <!-- Add New Character Form -->
+                    <div class="mb-3">
+                        <label for="character-name" class="form-label">Character Name:</label>
+                        <input id="character-name" v-model="newCharacter.name" type="text" class="form-control"
+                            placeholder="Enter character name" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="character-description" class="form-label">Character Description:</label>
+                        <textarea id="character-description" v-model="newCharacter.description" class="form-control"
+                            placeholder="Enter character description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="character-avatar" class="form-label">Character Avatar:</label>
+                        <input type="file" class="form-control" @change="uploadAvatar('newCharacter', $event)" />
+                    </div>
+                    <button class="btn btn-success" @click="addCharacter">Add Character</button>
+
+                    <!-- Existing Characters List -->
+                    <h2 class="mt-4">Existing Characters</h2>
+                    <ul class="list-group">
+                        <li v-for="(character, index) in selectedProject.characters" :key="character.name + index"
+                            class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn">
+                            <div class="d-flex align-items-center">
+                                <span @click="editCharacter(character, index)" class="ms-2"><strong>Name:</strong> {{
+                                    character.name }}</span>
+                                <img v-if="character.avatar" :src="character.avatar" alt="Avatar"
+                                    class="avatar-thumbnail" />
                             </div>
-
-                            <!-- Gender -->
-                            <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <input id="gender" v-model="currentCharacter.gender" type="text" class="form-control"
-                                    placeholder="Enter gender">
+                            <div class="btn-group">
+                                <button class="btn btn-warning btn-sm"
+                                    @click="editCharacter(character, index)">Edit</button>
+                                <button class="btn btn-danger btn-sm"
+                                    @click="confirmDeleteCharacter(index)">Delete</button>
                             </div>
+                        </li>
+                    </ul>
+                </div>
 
-                            <!-- Gender -->
-                            <div class="mb-3">
-                                <label for="pronouns" class="form-label">Gender</label>
-                                <input id="pronouns" v-model="currentCharacter.pronouns" type="text"
-                                    class="form-control" placeholder="Enter pronouns">
-                            </div>
+                <!-- In the Character Edit Page section -->
+                <div v-if="currentPage === 'editCharacter' && selectedProject && currentCharacter"
+                    class="animate__animated animate__fadeIn">
+                    <h1>Edit Character</h1>
 
-                            <!-- Date of Birth -->
-                            <div class="mb-3">
-                                <label for="dob" class="form-label">Date of Birth</label>
-                                <input id="dob" v-model="currentCharacter.dob" type="text" class="form-control"
-                                    placeholder="Enter date">
-                            </div>
-
-                            <!-- Job -->
-                            <div class="mb-3">
-                                <label for="job" class="form-label">Job</label>
-                                <input id="job" v-model="currentCharacter.job" type="text" class="form-control"
-                                    placeholder="Enter job">
-                            </div>
-
-                            <!-- Job Satisfaction -->
-                            <div class="mb-3">
-                                <label for="jobSatisfaction" class="form-label">Job Satisfaction</label>
-                                <input id="jobSatisfaction" v-model="currentCharacter.jobSatisfaction" type="text"
-                                    class="form-control" placeholder="Rate job satisfaction">
-                            </div>
-
-                            <!-- Health -->
-                            <div class="mb-3">
-                                <label for="health" class="form-label">Health</label>
-                                <input id="health" v-model="currentCharacter.health" type="text" class="form-control"
-                                    placeholder="Describe health status">
-                            </div>
-
-                            <!-- Relationships -->
-                            <div class="mb-3">
-                                <label for="relationships" class="form-label">Relationships</label>
-                                <input id="relationships" v-model="currentCharacter.relationships" type="text"
-                                    class="form-control" placeholder="Describe relationships">
-                            </div>
-
-                            <!-- Pets -->
-                            <div class="mb-3">
-                                <label for="pets" class="form-label">Pets</label>
-                                <input id="pets" v-model="currentCharacter.pets" type="text" class="form-control"
-                                    placeholder="Describe pets">
-                            </div>
-
-                            <!-- World -->
-                            <div class="mb-3">
-                                <label for="world" class="form-label">World</label>
-                                <input id="world" v-model="currentCharacter.world" type="text" class="form-control"
-                                    placeholder="Enter world">
-                            </div>
-
-                            <!-- Area of Residence -->
-                            <div class="mb-3">
-                                <label for="areaOfResidence" class="form-label">Area of Residence</label>
-                                <input id="areaOfResidence" v-model="currentCharacter.areaOfResidence" type="text"
-                                    class="form-control" placeholder="Enter area of residence">
-                            </div>
-
-                            <!-- Neighbourhood -->
-                            <div class="mb-3">
-                                <label for="neighbourhood" class="form-label">Neighbourhood</label>
-                                <input id="neighbourhood" v-model="currentCharacter.neighbourhood" type="text"
-                                    class="form-control" placeholder="Enter neighbourhood">
-                            </div>
-
-                            <!-- Home Description -->
-                            <div class="mb-3">
-                                <label for="homeDescription" class="form-label">Home Description</label>
-                                <textarea id="homeDescription" v-model="currentCharacter.homeDescription"
-                                    class="form-control" placeholder="Describe the home"></textarea>
-                            </div>
-
-                        </div>
+                    <div class="mb-3">
+                        <label for="edit-character-name" class="form-label">Character Name:</label>
+                        <input id="edit-character-name" v-model="currentCharacter.name" type="text"
+                            class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-character-description" class="form-label">Character Description:</label>
+                        <textarea id="edit-character-description" v-model="currentCharacter.description"
+                            class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-character-avatar" class="form-label">Character Avatar:</label>
+                        <input type="file" class="form-control" @change="uploadAvatar('currentCharacter', $event)" />
+                    </div>
+                    <div v-if="currentCharacter.avatar">
+                        <img :src="currentCharacter.avatar" alt="Avatar Preview" class="avatar-preview" />
                     </div>
 
-                    <!-- Appearance Section Toggle -->
-                    <div>
-                        <button class="btn btn-secondary"
-                            @click="appearanceAttributesVisible = !appearanceAttributesVisible">
-                            Appearance
-                        </button>
-                        <div v-if="appearanceAttributesVisible">
+                    <!-- Attributes Section -->
+                    <div class="attributes-section mt-4">
+                        <h3>Attributes</h3>
 
-                            <!-- Height -->
-                            <div class="mb-3">
-                                <label for="height" class="form-label">Height</label>
-                                <input id="height" v-model="currentCharacter.height" type="text" class="form-control"
-                                    placeholder="Enter height">
-                            </div>
+                        <!-- Character Section Toggle -->
+                        <div>
+                            <button class="btn btn-secondary"
+                                @click="characterAttributesVisible = !characterAttributesVisible">
+                                Character
+                            </button>
+                            <div v-if="characterAttributesVisible">
 
-                            <!-- Weight -->
-                            <div class="mb-3">
-                                <label for="weight" class="form-label">Weight</label>
-                                <input id="weight" v-model="currentCharacter.weight" type="text" class="form-control"
-                                    placeholder="Enter weight">
-                            </div>
+                                <!-- Age -->
+                                <div class="mb-3">
+                                    <label for="age" class="form-label">Age</label>
+                                    <input id="age" v-model="currentCharacter.age" type="text" class="form-control"
+                                        placeholder="Enter age">
+                                </div>
 
-                            <!-- Ethnicity -->
-                            <div class="mb-3">
-                                <label for="ethnicity" class="form-label">Ethnicity</label>
-                                <input id="ethnicity" v-model="currentCharacter.ethnicity" type="text"
-                                    class="form-control" placeholder="Enter ethnicity">
-                            </div>
+                                <!-- Gender -->
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <input id="gender" v-model="currentCharacter.gender" type="text"
+                                        class="form-control" placeholder="Enter gender">
+                                </div>
 
-                            <!-- Skin Tone -->
-                            <div class="mb-3">
-                                <label for="skinTone" class="form-label">Skin Tone</label>
-                                <input id="skinTone" v-model="currentCharacter.skinTone" type="text"
-                                    class="form-control" placeholder="Enter skin tone">
-                            </div>
+                                <!-- Gender -->
+                                <div class="mb-3">
+                                    <label for="pronouns" class="form-label">Gender</label>
+                                    <input id="pronouns" v-model="currentCharacter.pronouns" type="text"
+                                        class="form-control" placeholder="Enter pronouns">
+                                </div>
 
-                            <!-- Eye Color -->
-                            <div class="mb-3">
-                                <label for="eyeColor" class="form-label">Eye Color</label>
-                                <input id="eyeColor" v-model="currentCharacter.eyeColor" type="text"
-                                    class="form-control" placeholder="Enter eye color">
-                            </div>
+                                <!-- Date of Birth -->
+                                <div class="mb-3">
+                                    <label for="dob" class="form-label">Date of Birth</label>
+                                    <input id="dob" v-model="currentCharacter.dob" type="text" class="form-control"
+                                        placeholder="Enter date">
+                                </div>
 
-                            <!-- Distinguishing Features -->
-                            <div class="mb-3">
-                                <label for="distinguishingFeatures" class="form-label">Distinguishing Features</label>
-                                <input id="distinguishingFeatures" v-model="currentCharacter.distinguishingFeatures"
-                                    type="text" class="form-control" placeholder="Describe distinguishing features">
-                            </div>
+                                <!-- Job -->
+                                <div class="mb-3">
+                                    <label for="job" class="form-label">Job</label>
+                                    <input id="job" v-model="currentCharacter.job" type="text" class="form-control"
+                                        placeholder="Enter job">
+                                </div>
 
-                            <!-- Other Facial Features -->
-                            <div class="mb-3">
-                                <label for="otherFacialFeatures" class="form-label">Other Facial Features</label>
-                                <input id="otherFacialFeatures" v-model="currentCharacter.otherFacialFeatures"
-                                    type="text" class="form-control" placeholder="Describe other facial features">
-                            </div>
+                                <!-- Job Satisfaction -->
+                                <div class="mb-3">
+                                    <label for="jobSatisfaction" class="form-label">Job Satisfaction</label>
+                                    <input id="jobSatisfaction" v-model="currentCharacter.jobSatisfaction" type="text"
+                                        class="form-control" placeholder="Rate job satisfaction">
+                                </div>
 
-                            <!-- Hairstyle -->
-                            <div class="mb-3">
-                                <label for="hairstyle" class="form-label">Hairstyle</label>
-                                <input id="hairstyle" v-model="currentCharacter.hairstyle" type="text"
-                                    class="form-control" placeholder="Enter hairstyle">
-                            </div>
+                                <!-- Health -->
+                                <div class="mb-3">
+                                    <label for="health" class="form-label">Health</label>
+                                    <input id="health" v-model="currentCharacter.health" type="text"
+                                        class="form-control" placeholder="Describe health status">
+                                </div>
 
-                            <!-- Body Type -->
-                            <div class="mb-3">
-                                <label for="bodyType" class="form-label">Body Type</label>
-                                <input id="bodyType" v-model="currentCharacter.bodyType" type="text"
-                                    class="form-control" placeholder="Enter body type">
-                            </div>
+                                <!-- Relationships -->
+                                <div class="mb-3">
+                                    <label for="relationships" class="form-label">Relationships</label>
+                                    <input id="relationships" v-model="currentCharacter.relationships" type="text"
+                                        class="form-control" placeholder="Describe relationships">
+                                </div>
 
-                            <!-- Clothing Style -->
-                            <div class="mb-3">
-                                <label for="clothingStyle" class="form-label">Clothing Style</label>
-                                <input id="clothingStyle" v-model="currentCharacter.clothingStyle" type="text"
-                                    class="form-control" placeholder="Describe clothing style">
-                            </div>
+                                <!-- Pets -->
+                                <div class="mb-3">
+                                    <label for="pets" class="form-label">Pets</label>
+                                    <input id="pets" v-model="currentCharacter.pets" type="text" class="form-control"
+                                        placeholder="Describe pets">
+                                </div>
 
-                            <!-- Accessories -->
-                            <div class="mb-3">
-                                <label for="accessories" class="form-label">Accessories</label>
-                                <input id="accessories" v-model="currentCharacter.accessories" type="text"
-                                    class="form-control" placeholder="Describe accessories">
-                            </div>
-                        </div>
-                    </div>
+                                <!-- World -->
+                                <div class="mb-3">
+                                    <label for="world" class="form-label">World</label>
+                                    <input id="world" v-model="currentCharacter.world" type="text" class="form-control"
+                                        placeholder="Enter world">
+                                </div>
 
+                                <!-- Area of Residence -->
+                                <div class="mb-3">
+                                    <label for="areaOfResidence" class="form-label">Area of Residence</label>
+                                    <input id="areaOfResidence" v-model="currentCharacter.areaOfResidence" type="text"
+                                        class="form-control" placeholder="Enter area of residence">
+                                </div>
 
-                    <!-- Personality Section Toggle -->
-                    <div>
-                        <button class="btn btn-secondary"
-                            @click="personalityAttributesVisible = !personalityAttributesVisible">
-                            Personality
-                        </button>
-                        <div v-if="personalityAttributesVisible">
+                                <!-- Neighbourhood -->
+                                <div class="mb-3">
+                                    <label for="neighbourhood" class="form-label">Neighbourhood</label>
+                                    <input id="neighbourhood" v-model="currentCharacter.neighbourhood" type="text"
+                                        class="form-control" placeholder="Enter neighbourhood">
+                                </div>
 
+                                <!-- Home Description -->
+                                <div class="mb-3">
+                                    <label for="homeDescription" class="form-label">Home Description</label>
+                                    <textarea id="homeDescription" v-model="currentCharacter.homeDescription"
+                                        class="form-control" placeholder="Describe the home"></textarea>
+                                </div>
 
-                            <!-- Skills -->
-                            <div class="mb-3">
-                                <label for="skills" class="form-label">Skills</label>
-                                <input id="skills" v-model="currentCharacter.skills" type="text" class="form-control"
-                                    placeholder="Enter skills">
-                            </div>
-
-                            <!-- Incompetence -->
-                            <div class="mb-3">
-                                <label for="incompetence" class="form-label">Incompetence</label>
-                                <input id="incompetence" v-model="currentCharacter.incompetence" type="text"
-                                    class="form-control" placeholder="Enter incompetence">
-                            </div>
-
-                            <!-- Talent -->
-                            <div class="mb-3">
-                                <label for="talent" class="form-label">Talent</label>
-                                <input id="talent" v-model="currentCharacter.talent" type="text" class="form-control"
-                                    placeholder="Enter talent">
-                            </div>
-
-                            <!-- Weakness -->
-                            <div class="mb-3">
-                                <label for="weakness" class="form-label">Weakness</label>
-                                <input id="weakness" v-model="currentCharacter.weakness" type="text"
-                                    class="form-control" placeholder="Enter weakness">
-                            </div>
-
-                            <!-- Hobbies -->
-                            <div class="mb-3">
-                                <label for="hobbies" class="form-label">Hobbies</label>
-                                <input id="hobbies" v-model="currentCharacter.hobbies" type="text" class="form-control"
-                                    placeholder="Enter hobbies">
-                            </div>
-
-                            <!-- Habits -->
-                            <div class="mb-3">
-                                <label for="habits" class="form-label">Habits</label>
-                                <input id="habits" v-model="currentCharacter.habits" type="text" class="form-control"
-                                    placeholder="Enter habits">
-                            </div>
-
-                            <!-- Moral -->
-                            <div class="mb-3">
-                                <label for="moral" class="form-label">Moral</label>
-                                <input id="moral" v-model="currentCharacter.moral" type="text" class="form-control"
-                                    placeholder="Enter moral values">
-                            </div>
-
-                            <!-- Self Control -->
-                            <div class="mb-3">
-                                <label for="selfControl" class="form-label">Self Control</label>
-                                <input id="selfControl" v-model="currentCharacter.selfControl" type="text"
-                                    class="form-control" placeholder="Enter self control level">
-                            </div>
-
-                            <!-- Motivation -->
-                            <div class="mb-3">
-                                <label for="motivation" class="form-label">Motivation</label>
-                                <input id="motivation" v-model="currentCharacter.motivation" type="text"
-                                    class="form-control" placeholder="Enter motivation">
-                            </div>
-
-                            <!-- Discouragement -->
-                            <div class="mb-3">
-                                <label for="discouragement" class="form-label">Discouragement</label>
-                                <input id="discouragement" v-model="currentCharacter.discouragement" type="text"
-                                    class="form-control" placeholder="Enter discouragement">
-                            </div>
-
-                            <!-- Confidence Level -->
-                            <div class="mb-3">
-                                <label for="confidenceLevel" class="form-label">Confidence Level</label>
-                                <input id="confidenceLevel" v-model="currentCharacter.confidenceLevel" type="text"
-                                    class="form-control" placeholder="Enter confidence level">
-                            </div>
-
-                            <!-- Greatest Fear -->
-                            <div class="mb-3">
-                                <label for="greatestFear" class="form-label">Greatest Fear</label>
-                                <input id="greatestFear" v-model="currentCharacter.greatestFear" type="text"
-                                    class="form-control" placeholder="Enter greatest fear">
                             </div>
                         </div>
-                    </div>
 
+                        <!-- Appearance Section Toggle -->
+                        <div>
+                            <button class="btn btn-secondary"
+                                @click="appearanceAttributesVisible = !appearanceAttributesVisible">
+                                Appearance
+                            </button>
+                            <div v-if="appearanceAttributesVisible">
 
-                    <!-- History Section Toggle -->
-                    <div>
-                        <button class="btn btn-secondary" @click="historyAttributesVisible = !historyAttributesVisible">
-                            History
-                        </button>
-                        <div v-if="historyAttributesVisible">
-                            <h3>History</h3>
+                                <!-- Height -->
+                                <div class="mb-3">
+                                    <label for="height" class="form-label">Height</label>
+                                    <input id="height" v-model="currentCharacter.height" type="text"
+                                        class="form-control" placeholder="Enter height">
+                                </div>
 
-                            <!-- Childhood -->
-                            <div class="mb-3">
-                                <label for="childhood" class="form-label">Childhood</label>
-                                <input id="childhood" v-model="currentCharacter.childhood" type="text"
-                                    class="form-control" placeholder="Enter childhood details">
-                            </div>
+                                <!-- Weight -->
+                                <div class="mb-3">
+                                    <label for="weight" class="form-label">Weight</label>
+                                    <input id="weight" v-model="currentCharacter.weight" type="text"
+                                        class="form-control" placeholder="Enter weight">
+                                </div>
 
-                            <!-- Important Past Events -->
-                            <div class="mb-3">
-                                <label for="importantPastEvents" class="form-label">Important Past Events</label>
-                                <input id="importantPastEvents" v-model="currentCharacter.importantPastEvents"
-                                    type="text" class="form-control" placeholder="Enter important past events">
-                            </div>
+                                <!-- Ethnicity -->
+                                <div class="mb-3">
+                                    <label for="ethnicity" class="form-label">Ethnicity</label>
+                                    <input id="ethnicity" v-model="currentCharacter.ethnicity" type="text"
+                                        class="form-control" placeholder="Enter ethnicity">
+                                </div>
 
-                            <!-- Best Accomplishment -->
-                            <div class="mb-3">
-                                <label for="bestAccomplishment" class="form-label">Best Accomplishment</label>
-                                <input id="bestAccomplishment" v-model="currentCharacter.bestAccomplishment" type="text"
-                                    class="form-control" placeholder="Enter best accomplishment">
-                            </div>
+                                <!-- Skin Tone -->
+                                <div class="mb-3">
+                                    <label for="skinTone" class="form-label">Skin Tone</label>
+                                    <input id="skinTone" v-model="currentCharacter.skinTone" type="text"
+                                        class="form-control" placeholder="Enter skin tone">
+                                </div>
 
-                            <!-- Failure -->
-                            <div class="mb-3">
-                                <label for="failure" class="form-label">Failure</label>
-                                <input id="failure" v-model="currentCharacter.failure" type="text" class="form-control"
-                                    placeholder="Enter failure details">
-                            </div>
+                                <!-- Eye Color -->
+                                <div class="mb-3">
+                                    <label for="eyeColor" class="form-label">Eye Color</label>
+                                    <input id="eyeColor" v-model="currentCharacter.eyeColor" type="text"
+                                        class="form-control" placeholder="Enter eye color">
+                                </div>
 
-                            <!-- Secrets -->
-                            <div class="mb-3">
-                                <label for="secrets" class="form-label">Secrets</label>
-                                <input id="secrets" v-model="currentCharacter.secrets" type="text" class="form-control"
-                                    placeholder="Enter secrets">
-                            </div>
+                                <!-- Distinguishing Features -->
+                                <div class="mb-3">
+                                    <label for="distinguishingFeatures" class="form-label">Distinguishing
+                                        Features</label>
+                                    <input id="distinguishingFeatures" v-model="currentCharacter.distinguishingFeatures"
+                                        type="text" class="form-control" placeholder="Describe distinguishing features">
+                                </div>
 
-                            <!-- Best Memories -->
-                            <div class="mb-3">
-                                <label for="bestMemories" class="form-label">Best Memories</label>
-                                <input id="bestMemories" v-model="currentCharacter.bestMemories" type="text"
-                                    class="form-control" placeholder="Enter best memories">
-                            </div>
+                                <!-- Other Facial Features -->
+                                <div class="mb-3">
+                                    <label for="otherFacialFeatures" class="form-label">Other Facial Features</label>
+                                    <input id="otherFacialFeatures" v-model="currentCharacter.otherFacialFeatures"
+                                        type="text" class="form-control" placeholder="Describe other facial features">
+                                </div>
 
-                            <!-- Worst Memories -->
-                            <div class="mb-3">
-                                <label for="worstMemories" class="form-label">Worst Memories</label>
-                                <input id="worstMemories" v-model="currentCharacter.worstMemories" type="text"
-                                    class="form-control" placeholder="Enter worst memories">
-                            </div>
-                        </div>
-                    </div>
+                                <!-- Hairstyle -->
+                                <div class="mb-3">
+                                    <label for="hairstyle" class="form-label">Hairstyle</label>
+                                    <input id="hairstyle" v-model="currentCharacter.hairstyle" type="text"
+                                        class="form-control" placeholder="Enter hairstyle">
+                                </div>
 
-                    <!-- Story Section Toggle -->
-                    <div>
-                        <button class="btn btn-secondary" @click="storyAttributesVisible = !storyAttributesVisible">
-                            Story
-                        </button>
-                        <div v-if="storyAttributesVisible">
-                            <h3>Story</h3>
+                                <!-- Body Type -->
+                                <div class="mb-3">
+                                    <label for="bodyType" class="form-label">Body Type</label>
+                                    <input id="bodyType" v-model="currentCharacter.bodyType" type="text"
+                                        class="form-control" placeholder="Enter body type">
+                                </div>
 
-                            <!-- Story Role -->
-                            <div class="mb-3">
-                                <label for="story-role" class="form-label">Story Role</label>
-                                <input id="story-role" v-model="currentCharacter.storyRole" type="text"
-                                    class="form-control" placeholder="Enter story role">
-                            </div>
+                                <!-- Clothing Style -->
+                                <div class="mb-3">
+                                    <label for="clothingStyle" class="form-label">Clothing Style</label>
+                                    <input id="clothingStyle" v-model="currentCharacter.clothingStyle" type="text"
+                                        class="form-control" placeholder="Describe clothing style">
+                                </div>
 
-                            <!-- Short Term Goals -->
-                            <div class="mb-3">
-                                <label for="shortTermGoals" class="form-label">Short Term Goals</label>
-                                <input id="shortTermGoals" v-model="currentCharacter.shortTermGoals" type="text"
-                                    class="form-control" placeholder="Enter short term goals">
-                            </div>
-
-                            <!-- Long Term Goals -->
-                            <div class="mb-3">
-                                <label for="longTermGoals" class="form-label">Long Term Goals</label>
-                                <input id="longTermGoals" v-model="currentCharacter.longTermGoals" type="text"
-                                    class="form-control" placeholder="Enter long term goals">
+                                <!-- Accessories -->
+                                <div class="mb-3">
+                                    <label for="accessories" class="form-label">Accessories</label>
+                                    <input id="accessories" v-model="currentCharacter.accessories" type="text"
+                                        class="form-control" placeholder="Describe accessories">
+                                </div>
                             </div>
                         </div>
+
+
+                        <!-- Personality Section Toggle -->
+                        <div>
+                            <button class="btn btn-secondary"
+                                @click="personalityAttributesVisible = !personalityAttributesVisible">
+                                Personality
+                            </button>
+                            <div v-if="personalityAttributesVisible">
+
+
+                                <!-- Skills -->
+                                <div class="mb-3">
+                                    <label for="skills" class="form-label">Skills</label>
+                                    <input id="skills" v-model="currentCharacter.skills" type="text"
+                                        class="form-control" placeholder="Enter skills">
+                                </div>
+
+                                <!-- Incompetence -->
+                                <div class="mb-3">
+                                    <label for="incompetence" class="form-label">Incompetence</label>
+                                    <input id="incompetence" v-model="currentCharacter.incompetence" type="text"
+                                        class="form-control" placeholder="Enter incompetence">
+                                </div>
+
+                                <!-- Talent -->
+                                <div class="mb-3">
+                                    <label for="talent" class="form-label">Talent</label>
+                                    <input id="talent" v-model="currentCharacter.talent" type="text"
+                                        class="form-control" placeholder="Enter talent">
+                                </div>
+
+                                <!-- Weakness -->
+                                <div class="mb-3">
+                                    <label for="weakness" class="form-label">Weakness</label>
+                                    <input id="weakness" v-model="currentCharacter.weakness" type="text"
+                                        class="form-control" placeholder="Enter weakness">
+                                </div>
+
+                                <!-- Hobbies -->
+                                <div class="mb-3">
+                                    <label for="hobbies" class="form-label">Hobbies</label>
+                                    <input id="hobbies" v-model="currentCharacter.hobbies" type="text"
+                                        class="form-control" placeholder="Enter hobbies">
+                                </div>
+
+                                <!-- Habits -->
+                                <div class="mb-3">
+                                    <label for="habits" class="form-label">Habits</label>
+                                    <input id="habits" v-model="currentCharacter.habits" type="text"
+                                        class="form-control" placeholder="Enter habits">
+                                </div>
+
+                                <!-- Moral -->
+                                <div class="mb-3">
+                                    <label for="moral" class="form-label">Moral</label>
+                                    <input id="moral" v-model="currentCharacter.moral" type="text" class="form-control"
+                                        placeholder="Enter moral values">
+                                </div>
+
+                                <!-- Self Control -->
+                                <div class="mb-3">
+                                    <label for="selfControl" class="form-label">Self Control</label>
+                                    <input id="selfControl" v-model="currentCharacter.selfControl" type="text"
+                                        class="form-control" placeholder="Enter self control level">
+                                </div>
+
+                                <!-- Motivation -->
+                                <div class="mb-3">
+                                    <label for="motivation" class="form-label">Motivation</label>
+                                    <input id="motivation" v-model="currentCharacter.motivation" type="text"
+                                        class="form-control" placeholder="Enter motivation">
+                                </div>
+
+                                <!-- Discouragement -->
+                                <div class="mb-3">
+                                    <label for="discouragement" class="form-label">Discouragement</label>
+                                    <input id="discouragement" v-model="currentCharacter.discouragement" type="text"
+                                        class="form-control" placeholder="Enter discouragement">
+                                </div>
+
+                                <!-- Confidence Level -->
+                                <div class="mb-3">
+                                    <label for="confidenceLevel" class="form-label">Confidence Level</label>
+                                    <input id="confidenceLevel" v-model="currentCharacter.confidenceLevel" type="text"
+                                        class="form-control" placeholder="Enter confidence level">
+                                </div>
+
+                                <!-- Greatest Fear -->
+                                <div class="mb-3">
+                                    <label for="greatestFear" class="form-label">Greatest Fear</label>
+                                    <input id="greatestFear" v-model="currentCharacter.greatestFear" type="text"
+                                        class="form-control" placeholder="Enter greatest fear">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- History Section Toggle -->
+                        <div>
+                            <button class="btn btn-secondary"
+                                @click="historyAttributesVisible = !historyAttributesVisible">
+                                History
+                            </button>
+                            <div v-if="historyAttributesVisible">
+                                <h3>History</h3>
+
+                                <!-- Childhood -->
+                                <div class="mb-3">
+                                    <label for="childhood" class="form-label">Childhood</label>
+                                    <input id="childhood" v-model="currentCharacter.childhood" type="text"
+                                        class="form-control" placeholder="Enter childhood details">
+                                </div>
+
+                                <!-- Important Past Events -->
+                                <div class="mb-3">
+                                    <label for="importantPastEvents" class="form-label">Important Past Events</label>
+                                    <input id="importantPastEvents" v-model="currentCharacter.importantPastEvents"
+                                        type="text" class="form-control" placeholder="Enter important past events">
+                                </div>
+
+                                <!-- Best Accomplishment -->
+                                <div class="mb-3">
+                                    <label for="bestAccomplishment" class="form-label">Best Accomplishment</label>
+                                    <input id="bestAccomplishment" v-model="currentCharacter.bestAccomplishment"
+                                        type="text" class="form-control" placeholder="Enter best accomplishment">
+                                </div>
+
+                                <!-- Failure -->
+                                <div class="mb-3">
+                                    <label for="failure" class="form-label">Failure</label>
+                                    <input id="failure" v-model="currentCharacter.failure" type="text"
+                                        class="form-control" placeholder="Enter failure details">
+                                </div>
+
+                                <!-- Secrets -->
+                                <div class="mb-3">
+                                    <label for="secrets" class="form-label">Secrets</label>
+                                    <input id="secrets" v-model="currentCharacter.secrets" type="text"
+                                        class="form-control" placeholder="Enter secrets">
+                                </div>
+
+                                <!-- Best Memories -->
+                                <div class="mb-3">
+                                    <label for="bestMemories" class="form-label">Best Memories</label>
+                                    <input id="bestMemories" v-model="currentCharacter.bestMemories" type="text"
+                                        class="form-control" placeholder="Enter best memories">
+                                </div>
+
+                                <!-- Worst Memories -->
+                                <div class="mb-3">
+                                    <label for="worstMemories" class="form-label">Worst Memories</label>
+                                    <input id="worstMemories" v-model="currentCharacter.worstMemories" type="text"
+                                        class="form-control" placeholder="Enter worst memories">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Story Section Toggle -->
+                        <div>
+                            <button class="btn btn-secondary" @click="storyAttributesVisible = !storyAttributesVisible">
+                                Story
+                            </button>
+                            <div v-if="storyAttributesVisible">
+                                <h3>Story</h3>
+
+                                <!-- Story Role -->
+                                <div class="mb-3">
+                                    <label for="story-role" class="form-label">Story Role</label>
+                                    <input id="story-role" v-model="currentCharacter.storyRole" type="text"
+                                        class="form-control" placeholder="Enter story role">
+                                </div>
+
+                                <!-- Short Term Goals -->
+                                <div class="mb-3">
+                                    <label for="shortTermGoals" class="form-label">Short Term Goals</label>
+                                    <input id="shortTermGoals" v-model="currentCharacter.shortTermGoals" type="text"
+                                        class="form-control" placeholder="Enter short term goals">
+                                </div>
+
+                                <!-- Long Term Goals -->
+                                <div class="mb-3">
+                                    <label for="longTermGoals" class="form-label">Long Term Goals</label>
+                                    <input id="longTermGoals" v-model="currentCharacter.longTermGoals" type="text"
+                                        class="form-control" placeholder="Enter long term goals">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <button class="btn btn-primary" @click="saveCharacter">Save Changes</button>
+                        <button class="btn btn-secondary" @click="navigateTo('characters')">Cancel</button>
                     </div>
-
-
-
-                    <button class="btn btn-primary" @click="saveCharacter">Save Changes</button>
-                    <button class="btn btn-secondary" @click="navigateTo('characters')">Cancel</button>
                 </div>
             </div>
     </div>
@@ -884,13 +1596,39 @@
                     currentPage: 'home',
                     selectedProject: null,
                     currentCharacterProfile: null,
+                    currentLocationProfile: null,
                     projectName: '',
                     projectDescription: '',
                     projects: [],
+                    currentSpecies: {
+                        name: '',
+                        description: '',
+                        avatar: null
+                    },
+                    currentLanguage: {
+                        name: '',
+                        description: ''
+                    },
+                    currentItem: {
+                        name: '',
+                        description: '',
+                        avatar: null
+                    },
+                    isEditing: false,
                     chapterName: '',
                     chapterColor: '#ffffff',
                     currentChapter: null,
                     currentChapterContent: '',
+                    currentLocation: null,
+                    currentLocationIndex: null,
+                    locationAttributesVisible: false,
+                    biologyAttributesVisible: false,
+                    cultureAttributesVisible: false,
+                    politicsAttributesVisible: false,
+                    magicAttributesVisible: false,
+                    historyAttributesVisible: false,
+                    religionAttributesVisible: false,
+                    tradeAttributesVisible: false,
                     colorOptions: [
                         { name: 'Not Started', hex: '#FF5733' },
                         { name: 'Outlining', hex: '#f29429' },
@@ -905,10 +1643,164 @@
                     personalityAttributesVisible: false,
                     historyAttributesVisible: false,
                     storyAttributesVisible: false,
+                    locationAttributesVisible: false,
                     newLocation: {
                         name: '',
                         description: '',
-                        avatar: null
+                        avatar: null,
+                        locationVisible: true,
+                        biologyAttributesVisible: false,
+                        cultureVisible: false,
+                        politicsVisible: false,
+                        magicAndTechnologyVisible: false,
+                        historyVisible: false,
+                        religionVisible: false,
+                        tradeAndPublicRelationsVisible: false,
+                        location: {
+                            dimensions: '',
+                            objects: '',
+                            condition: '',
+                            feeling: '',
+                            noises: '',
+                            smell: ''
+                        },
+                        biologyAndEnvironment: {
+                            climate: '',
+                            landmarks: '',
+                            flora: '',
+                            fauna: '',
+                            bodiesOfWater: '',
+                            pollution: ''
+                        },
+                        culture: {
+                            inhabitants: '',
+                            language: '',
+                            rituals: '',
+                            generalEthics: '',
+                            artAndMusic: '',
+                            viewsOnLife: '',
+                            viewsOnDeath: '',
+                            genderEquality: '',
+                            raceEquality: ''
+                        },
+                        politics: {
+                            governmentSystem: '',
+                            politicalParties: '',
+                            importantPoliticalFigures: '',
+                            publicOpinion: '',
+                            laws: '',
+                            punishments: '',
+                            lawEnforcement: '',
+                            opposingForces: ''
+                        },
+                        magicAndTechnology: {
+                            magic: '',
+                            technologicalLevel: '',
+                            uniqueTechnologies: '',
+                            medicineAndHealthCare: '',
+                            ethicalControversies: ''
+                        },
+                        history: {
+                            dateFounded: '',
+                            founder: '',
+                            majorEvents: ''
+                        },
+                        religion: {
+                            deities: '',
+                            religiousGroups: '',
+                            religiousLeaders: '',
+                            religionFounding: '',
+                            religiousValues: '',
+                            commandments: '',
+                            governmentView: '',
+                            freedomOfReligion: ''
+                        },
+                        tradeAndPublicRelations: {
+                            currency: '',
+                            war: '',
+                            tradePartners: '',
+                            majorImports: '',
+                            majorExports: ''
+                        }
+                    },
+                    currentLocation: {
+                        name: '',
+                        description: '',
+                        avatar: null,
+                        locationVisible: true,
+                        biologyAttributesVisible: false,
+                        cultureVisible: false,
+                        politicsVisible: false,
+                        magicAndTechnologyVisible: false,
+                        historyVisible: false,
+                        religionVisible: false,
+                        tradeAndPublicRelationsVisible: false,
+                        location: {
+                            dimensions: '',
+                            objects: '',
+                            condition: '',
+                            feeling: '',
+                            noises: '',
+                            smell: ''
+                        },
+                        biologyAndEnvironment: {
+                            climate: '',
+                            landmarks: '',
+                            flora: '',
+                            fauna: '',
+                            bodiesOfWater: '',
+                            pollution: ''
+                        },
+                        culture: {
+                            inhabitants: '',
+                            language: '',
+                            rituals: '',
+                            generalEthics: '',
+                            artAndMusic: '',
+                            viewsOnLife: '',
+                            viewsOnDeath: '',
+                            genderEquality: '',
+                            raceEquality: ''
+                        },
+                        politics: {
+                            governmentSystem: '',
+                            politicalParties: '',
+                            importantPoliticalFigures: '',
+                            publicOpinion: '',
+                            laws: '',
+                            punishments: '',
+                            lawEnforcement: '',
+                            opposingForces: ''
+                        },
+                        magicAndTechnology: {
+                            magic: '',
+                            technologicalLevel: '',
+                            uniqueTechnologies: '',
+                            medicineAndHealthCare: '',
+                            ethicalControversies: ''
+                        },
+                        history: {
+                            dateFounded: '',
+                            founder: '',
+                            majorEvents: ''
+                        },
+                        religion: {
+                            deities: '',
+                            religiousGroups: '',
+                            religiousLeaders: '',
+                            religionFounding: '',
+                            religiousValues: '',
+                            commandments: '',
+                            governmentView: '',
+                            freedomOfReligion: ''
+                        },
+                        tradeAndPublicRelations: {
+                            currency: '',
+                            war: '',
+                            tradePartners: '',
+                            majorImports: '',
+                            majorExports: ''
+                        }
                     },
                     newCharacter: {
                         name: '',
@@ -975,7 +1867,8 @@
                             shortTermGoals: '',
                             longTermGoals: ''
                         }
-                    }, currentCharacter: {
+                    },
+                    currentCharacter: {
                         name: '',
                         description: '',
                         avatar: null,
@@ -1045,6 +1938,15 @@
 
             },
             mounted() {
+                if (localStorage.getItem('currentSpecies')) {
+                    this.currentSpecies = JSON.parse(localStorage.getItem('currentSpecies'));
+                }
+                if (localStorage.getItem('currentLanguage')) {
+                    this.currentLanguage = JSON.parse(localStorage.getItem('currentLanguage'));
+                }
+                if (localStorage.getItem('currentItem')) {
+                    this.currentItem = JSON.parse(localStorage.getItem('currentItem'));
+                }
                 const storedProjects = localStorage.getItem('projects');
                 if (storedProjects) {
                     this.projects = JSON.parse(storedProjects);
@@ -1238,6 +2140,29 @@
                     }
                 },
 
+                editLocation(location, index) {
+                    this.currentLocation = { ...location }; // Clone the location to avoid directly modifying the original
+                    this.currentLocationIndex = index; // Track the index for saving changes later
+                    this.currentPage = 'editLocation'; // Navigate to the location edit page
+                },
+                saveLocationChanges() {
+                    if (this.currentLocation.name && this.currentLocation.description) {
+                        // Update the original location in the array
+                        this.$set(this.selectedProject.locations, this.currentLocationIndex, { ...this.currentLocation });
+                        this.saveToLocalStorage(); // Save changes
+                        this.currentLocation = null;
+                        this.currentLocationIndex = null;
+                        this.currentPage = 'worldbuilding'; // Return to the worldbuilding management page
+                    } else {
+                        alert('Please fill out all fields for the location!');
+                    }
+                },
+                cancelEditLocation() {
+                    this.currentLocation = null;
+                    this.currentLocationIndex = null;
+                    this.currentPage = 'worldbuilding'; // Return to the worldbuilding management page without saving
+                },
+
 
                 // Method to upload avatar image
                 uploadAvatar(locationKey, event) {
@@ -1250,18 +2175,48 @@
                         reader.readAsDataURL(file);
                     }
                 },
-
-                // Method to edit location
-                editLocation(location, index) {
-                    // Set the form with the selected location's data for editing
-                    this.newLocation = { ...location, index };
-                },
-
                 // Method to confirm deletion of location
                 confirmDeleteLocation(index) {
                     if (confirm('Are you sure you want to delete this location?')) {
                         this.selectedProject.locations.splice(index, 1);
                     }
+                },
+                showLocationProfile(location, index) {
+                    this.currentLocationProfile = location;
+                },
+                closeLocationProfile() {
+                    this.currentLocationProfile = null;
+                },
+                saveSpeciesLanguagesItemsChanges() {
+                    // Save the current species, language, and item data to localStorage
+                    localStorage.setItem('currentSpecies', JSON.stringify(this.currentSpecies));
+                    localStorage.setItem('currentLanguage', JSON.stringify(this.currentLanguage));
+                    localStorage.setItem('currentItem', JSON.stringify(this.currentItem));
+
+                    // Optionally show a success message or perform any other actions
+                    alert("Changes saved locally!");
+                },
+
+                // Cancel edits and revert to original data
+                cancelEditSpeciesLanguagesItems() {
+                    // Optionally, retrieve data from localStorage or reset values to default
+                    this.currentSpecies = JSON.parse(localStorage.getItem('currentSpecies')) || {
+                        name: '',
+                        description: '',
+                        avatar: null
+                    };
+                    this.currentLanguage = JSON.parse(localStorage.getItem('currentLanguage')) || {
+                        name: '',
+                        description: ''
+                    };
+                    this.currentItem = JSON.parse(localStorage.getItem('currentItem')) || {
+                        name: '',
+                        description: '',
+                        avatar: null
+                    };
+
+                    // Optionally close or reset editing
+                    console.log("Cancelling edits and reverting to local data.");
                 }
             }
         });
